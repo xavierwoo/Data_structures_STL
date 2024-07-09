@@ -1,0 +1,186 @@
+//
+//  ds_list.h
+//  data_structures_stl
+//
+//  Created by 吴 歆韵 on 2024/4/6.
+//
+
+#ifndef ds_list_h
+#define ds_list_h
+
+#include <optional>
+#include <cassert>
+
+namespace ds {
+
+template <typename T>
+struct list{
+private:
+    struct Node;
+    Node* _head;
+    Node* _tail;
+    unsigned int _size {0};
+    
+public:
+    struct iterator;
+    list();
+    ~list();
+    
+    auto size() -> unsigned int;
+    void push_back(const T& );
+    
+    auto begin() -> iterator;
+    auto end() -> iterator;
+    
+    auto insert(const iterator , const T& ) -> iterator;
+    auto erase(const iterator ) -> iterator;
+};
+
+}
+
+namespace ds {
+
+template <typename T>
+struct list<T>::Node{
+    Node* prev {nullptr};
+    std::optional<T> data {std::nullopt};
+    Node* next {nullptr};
+    
+    Node() = default;
+    Node(const T& value): data(value){}
+};
+
+}
+
+namespace ds {
+
+template <typename T>
+struct list<T>::iterator{
+    friend list;
+private:
+    Node *_curr;
+public:
+    iterator(Node* curr_node): _curr(curr_node){}
+    
+    auto operator++() -> iterator&;
+    auto operator*() -> T&;
+    auto operator!=(const iterator ) -> bool;
+};
+
+};
+
+//********** ds::list 成员函数实现********************
+template <typename T>
+ds::list<T>::list(){
+    _head = new Node();
+    _tail = new Node();
+    _head->next = _tail;
+    _tail->prev = _head;
+}
+
+template <typename T>
+ds::list<T>::~list(){
+    auto curr {_head};
+    while(curr != nullptr){
+        auto next {curr->next};
+        delete curr;
+        curr = next;
+    }
+}
+
+template <typename T>
+auto ds::list<T>::size() -> unsigned int{
+    return _size;
+}
+
+template <typename T>
+void ds::list<T>::push_back(const T& value){
+    auto new_node {new Node(value)};
+    
+    new_node->next = _tail;
+    new_node->prev = _tail->prev;
+    _tail->prev->next = new_node;
+    _tail->prev = new_node;
+    ++_size;
+}
+
+template <typename T>
+auto ds::list<T>::begin() -> iterator{
+    return iterator(_head->next);
+}
+
+template <typename T>
+auto ds::list<T>::end() -> iterator{
+    return iterator(_tail);
+}
+
+//template <typename T>
+//auto ds::list<T>::rbegin() -> reverse_iterator{
+//    return reverse_iterator(m_tail->prev);
+//}
+//
+//template <typename T>
+//auto ds::list<T>::rend() -> reverse_iterator{
+//    return reverse_iterator(m_head);
+//}
+
+//在pos位前插入value
+template <typename T>
+auto ds::list<T>::insert(
+    const iterator pos,
+    const T& value)
+-> iterator {
+    
+    auto new_node {new Node(value)};
+    auto prev {pos._curr->prev};
+    
+    new_node->prev = prev;
+    new_node->next = pos._curr;
+    
+    prev->next = new_node;
+    pos._curr->prev = new_node;
+    
+    ++_size;
+    
+    return iterator(new_node);
+}
+
+template <typename T>
+auto ds::list<T>::erase(
+    const iterator pos
+) -> iterator {
+    
+    pos._curr->prev->next = pos._curr->next;
+    pos._curr->next->prev = pos._curr->prev;
+    
+    iterator ret_it(pos._curr->next);
+    pos._curr->data.value().~T();
+    delete pos._curr;
+    --_size;
+    return ret_it;
+}
+
+//********** ds::list<T>::iterator 成员函数实现********************
+
+template <typename T>
+auto ds::list<T>::iterator::operator++() -> iterator& {
+    assert(_curr->next != nullptr && "当前迭代器没有后继！");
+    _curr = _curr->next;
+    return *this;
+}
+
+template <typename T>
+auto ds::list<T>::iterator::operator*() -> T&{
+    assert(_curr->data != std::nullopt && "当前迭代器没有值！");
+    return _curr->data.value();
+}
+
+template <typename T>
+auto ds::list<T>::iterator::operator!=(
+    const iterator other
+) -> bool {
+    
+    return _curr != other._curr;
+}
+
+#endif /* list_h */
