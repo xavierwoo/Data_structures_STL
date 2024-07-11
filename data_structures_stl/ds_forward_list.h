@@ -20,7 +20,6 @@ private:
     struct Node;
     Node* _head;
     Node* _tail;
-    
 public:
     struct iterator;
     forward_list();
@@ -31,7 +30,7 @@ public:
     auto end() -> iterator;
     
     auto insert_after(const iterator, const T&) -> iterator;
-    auto erase_after(const iterator ) -> iterator;
+    auto erase_after(const iterator )-> iterator;
     void reverse();
 };
 
@@ -82,7 +81,6 @@ ds::forward_list<T>::~forward_list(){
     
     while(curr != nullptr){
         next = curr->next;
-        curr->data->~T();
         delete curr;
         curr = next;
     }
@@ -98,16 +96,12 @@ void ds::forward_list<T>::push_front(
 }
 
 template <typename T>
-auto ds::forward_list<T>::begin(
-) -> iterator{
-    
+auto ds::forward_list<T>::begin() -> iterator{
     return iterator(_head->next);
 }
 
 template <typename T>
-auto ds::forward_list<T>::end(
-) -> iterator{
-    
+auto ds::forward_list<T>::end() -> iterator{
     return iterator(_tail);
 }
 
@@ -116,7 +110,7 @@ auto ds::forward_list<T>::insert_after(
     const iterator pos,
     const T& value
 ) -> iterator {
-    
+
     auto new_node {new Node(value)};
     new_node->next = pos._curr->next;
     pos._curr->next = new_node;
@@ -127,28 +121,26 @@ template <typename T>
 auto ds::forward_list<T>::erase_after(
     const iterator pos
 ) -> iterator {
-    
-    assert(pos._curr->next != nullptr && "此迭代器没有后继！");
+
+    assert(pos._curr->next != nullptr
+            && "此迭代器没有后继！");
     auto node_to_del{pos._curr->next};
     pos._curr->next = pos._curr->next->next;
-     
-    iterator next_it(pos._curr->next);
-    
-    node_to_del->data.value().~T();
+
     delete node_to_del;
-    
-    return next_it;
+
+    return iterator(pos._curr->next);
 }
 
 template <typename T>
 void ds::forward_list<T>::reverse(){
     auto *new_head {new Node()};
     new_head->next = _tail;
-    
+
     while( _head->next != _tail){
         auto next {_head->next};
         _head->next = next->next;
-        
+
         next->next = new_head->next;
         new_head->next = next;
     }
@@ -160,8 +152,9 @@ void ds::forward_list<T>::reverse(){
 template <typename T>
 auto ds::forward_list<T>::iterator::operator++(
 ) -> iterator&{
-    
-    assert(_curr != nullptr && "此迭代器没有后继！");
+
+    assert(_curr != nullptr
+            && "此迭代器没有后继！");
     _curr = _curr->next;
     return *this;
 }
@@ -169,8 +162,9 @@ auto ds::forward_list<T>::iterator::operator++(
 template <typename T>
 auto ds::forward_list<T>::iterator::operator*(
 ) -> T&{
-    
-    assert(_curr->data != std::nullopt && "当前节点没有值！");
+
+    assert(_curr->data != std::nullopt
+            && "当前节点没有值！");
     return _curr->data.value();
 }
 
@@ -178,7 +172,7 @@ template <typename T>
 auto ds::forward_list<T>::iterator::operator!=(
     const iterator other
 ) -> bool{
-    
+
     return _curr != other._curr;
 }
 

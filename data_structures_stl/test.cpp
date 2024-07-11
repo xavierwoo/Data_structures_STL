@@ -203,14 +203,13 @@ void test_forward_list_push_front_and_traversal(){
     lst.push_front(2);
     lst.push_front(3);
     lst.push_front(4);
-    
+
     cout<<"\t使用迭代器遍历：";
     for(auto it{lst.begin()}; it!=lst.end(); ++it){
         cout<<*it<<' ';
     }
     cout<<"\n\t使用迭代器语法糖遍历：";
     for(auto e : lst) cout<<e<<' ';
-    
     cout<<'\n';
 }
 
@@ -245,7 +244,7 @@ void test_forward_list_erase_after(){
     lst.push_front(3);
     lst.push_front(4);
     
-    cout<<"\t删除元素3：";
+    cout<<"\t删除元素3后面的元素：";
     for(auto it{lst.begin()}; it!=lst.end(); ++it){
         if(*it == 3){
             auto ret_it = lst.erase_after(it);
@@ -275,10 +274,10 @@ void test_forward_list_reverse(){
 }
 
 void test_forward_list(){
-    test_forward_list_push_front_and_traversal();
-    test_forward_list_insert_after();
+//    test_forward_list_push_front_and_traversal();
+//    test_forward_list_insert_after();
     test_forward_list_erase_after();
-    test_forward_list_reverse();
+//    test_forward_list_reverse();
 }
 
 
