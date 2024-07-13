@@ -19,19 +19,17 @@ private:
     struct Node;
     Node* _head;
     Node* _tail;
-    unsigned int _size {0};
+    unsigned int _size;
     
 public:
     struct iterator;
     list();
     ~list();
     
-    auto size() -> unsigned int;
+    auto size() -> unsigned int{return _size;}
     void push_back(const T& );
-    
     auto begin() -> iterator;
     auto end() -> iterator;
-    
     auto insert(const iterator , const T& ) -> iterator;
     auto erase(const iterator ) -> iterator;
 };
@@ -63,15 +61,16 @@ public:
     iterator(Node* curr_node): _curr(curr_node){}
     
     auto operator++() -> iterator&;
+    auto operator--() -> iterator&;
     auto operator*() -> T&;
     auto operator!=(const iterator ) -> bool;
 };
 
-};
+}
 
 //********** ds::list 成员函数实现********************
 template <typename T>
-ds::list<T>::list(){
+ds::list<T>::list():_size(0){
     _head = new Node();
     _tail = new Node();
     _head->next = _tail;
@@ -80,17 +79,12 @@ ds::list<T>::list(){
 
 template <typename T>
 ds::list<T>::~list(){
-    auto curr {_head};
+    Node* curr {_head};
     while(curr != nullptr){
         auto next {curr->next};
         delete curr;
         curr = next;
     }
-}
-
-template <typename T>
-auto ds::list<T>::size() -> unsigned int{
-    return _size;
 }
 
 template <typename T>
@@ -113,16 +107,6 @@ template <typename T>
 auto ds::list<T>::end() -> iterator{
     return iterator(_tail);
 }
-
-//template <typename T>
-//auto ds::list<T>::rbegin() -> reverse_iterator{
-//    return reverse_iterator(m_tail->prev);
-//}
-//
-//template <typename T>
-//auto ds::list<T>::rend() -> reverse_iterator{
-//    return reverse_iterator(m_head);
-//}
 
 //在pos位前插入value
 template <typename T>
@@ -152,9 +136,7 @@ auto ds::list<T>::erase(
     
     pos._curr->prev->next = pos._curr->next;
     pos._curr->next->prev = pos._curr->prev;
-    
     iterator ret_it(pos._curr->next);
-    pos._curr->data.value().~T();
     delete pos._curr;
     --_size;
     return ret_it;
@@ -166,6 +148,13 @@ template <typename T>
 auto ds::list<T>::iterator::operator++() -> iterator& {
     assert(_curr->next != nullptr && "当前迭代器没有后继！");
     _curr = _curr->next;
+    return *this;
+}
+
+template <typename T>
+auto ds::list<T>::iterator::operator--() -> iterator& {
+    assert(_curr->prev != nullptr && "当前迭代器没有前驱！");
+    _curr = _curr->prev;
     return *this;
 }
 

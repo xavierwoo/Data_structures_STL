@@ -308,10 +308,11 @@ void test_list_traversal(){
     
     cout<<"\n\t使用迭代器语法糖：";
     for(auto e : lst) cout<<e<<' ';
-//    cout<<"\n\t使用反向迭代器：";
-//    for(auto it{lst.rbegin()}; it != lst.rend(); ++it){
-//        cout<<*it<<' ';
-//    }
+
+    auto it {lst.end()};
+    --it;
+    cout<<std::endl<<*it<<std::endl;
+
     cout<<'\n';
 }
 
@@ -325,13 +326,10 @@ void test_list_insert(){
     
     auto it {lst.begin()};
     ++it;
-    
     it = lst.insert(it, 10);
-    it = lst.insert(it, 11);
-    
-    for(auto e : lst) cout<<e<<' ';
     
     cout<<"\n\t插入后迭代器指向："<<*it<<'\n';
+    for(auto e : lst) cout<<e<<' ';
 }
 
 void test_list_erase(){

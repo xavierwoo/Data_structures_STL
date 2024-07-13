@@ -76,11 +76,9 @@ ds::forward_list<T>::forward_list(){
 
 template <typename T>
 ds::forward_list<T>::~forward_list(){
-    Node *curr {_head};
-    Node *next;
-    
+    Node* curr {_head};
     while(curr != nullptr){
-        next = curr->next;
+        auto next {curr->next};
         delete curr;
         curr = next;
     }

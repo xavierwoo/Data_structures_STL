@@ -21,8 +21,8 @@ int main(int argc, const char * argv[]) {
 //    explain_array_limitations();
 //
 //    test_vector();
-    test_forward_list();
-//    test_list();
+//    test_forward_list();
+    test_list();
 //    test_stack();
 //    test_queue();
 //
