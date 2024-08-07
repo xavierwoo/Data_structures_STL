@@ -10,91 +10,81 @@
 #include <sstream>
 #include <iostream>
 #include <algorithm>
-//#include <limits>
 #include <cmath>
 
-using std::cerr;
+using std::cout;
 
-ds::Calculator::Calculator(const string& source_code){
-    grammar_tree = parse(source_code);
+ds::Calculator::Calculator(
+    const string& source_code
+){
+    parse(source_code);
     _result = _is_grammar_correct ?
-            evaluate(grammar_tree)
+            evaluate(_grammar_tree)
             : 
             INFINITY;
+    //INFINITY 在<cmath>头文件中定义
 }
 
-auto ds::Calculator::parse(
+void ds::Calculator::parse(
     const string& source_code
-) -> Expression{
-    
-    auto tokens {tokenize(source_code)};
-    auto root {analyze(tokens)};
-    if(!tokens.empty()){
+){
+    tokenize(source_code);
+    _grammar_tree = analyze();
+    if(!_token_queue.empty()){
         _is_grammar_correct = false;
-        cerr << "非法表达式\n";
+        cout << "非法表达式\n";
     }
-    return root;
 }
 
-auto ds::Calculator::tokenize(
+void ds::Calculator::tokenize(
     const string& expression
-) -> Token_Q {
+){
     string spaces_added_expression
         = regex_replace(expression, 
                         std::regex("[(),]"), " $0 ");
     
     std::istringstream iss {spaces_added_expression};
-    Token_Q token_Q;
     string token;
-    
-    while (iss >> token) token_Q.push(token);
-    return token_Q;
+    while (iss >> token) _token_queue.push(token);
 }
 
-auto ds::Calculator::analyze(
-    Token_Q& token_Q
-) -> Expression{
+auto ds::Calculator::analyze() -> Expression {
+    auto token {_token_queue.front()};
+    _token_queue.pop();
     
-    auto token {token_Q.front()};
-    token_Q.pop();
-    
-    if(token_Q.front() != "("){
+    if(_token_queue.front() != "("){
         return Expression(token, {});
     } else {
-        token_Q.pop();
-        return Expression(token, analyze_para(token_Q));
+        _token_queue.pop();
+        return Expression(token, analyze_para());
     }
 }
 
-auto ds::Calculator::analyze_para(
-    Token_Q& token_Q
-) -> Parameter_list{
-    
+auto ds::Calculator::analyze_para() -> Parameter_list{
     Parameter_list parameters;
-    while(!token_Q.empty() && token_Q.front() != ")"){
+    while(!_token_queue.empty() && _token_queue.front() != ")"){
         if(!parameters.empty()){
-            if(token_Q.front() != ","){
-                cerr<<"标识符需要用“,”分隔！\n";
+            if(_token_queue.front() != ","){
+                cout<<"标识符需要用“,”分隔！\n";
                 _is_grammar_correct = false;
                 return parameters;
             }
-            token_Q.pop(); //删除 “,”
+            _token_queue.pop(); //删除 “,”
         }
-        parameters.push_back(analyze(token_Q));
+        parameters.push_back(analyze());
     }
-    if( token_Q.empty() ){
-        cerr << "表达式缺少匹配的“)“！\n";
+    if( _token_queue.empty() ){
+        cout << "表达式缺少匹配的“)“！\n";
         _is_grammar_correct = false;
         return parameters;
     }
-    token_Q.pop();
+    _token_queue.pop();
     return parameters;
 }
 
 auto ds::Calculator::evaluate(const Expression& expr) -> double{
-    
     const string& identifier {expr.data};
-    const Parameter_list parameters {expr.children};
+    const Parameter_list& parameters {expr.children};
     
     if(identifier == "add") return calculate_add(parameters);
     else if(identifier == "sub") return calculate_sub(parameters);
@@ -103,13 +93,13 @@ auto ds::Calculator::evaluate(const Expression& expr) -> double{
     else if(std::all_of(identifier.begin(), identifier.end(), 
                         [](char c){return std::isdigit(c);})){
         if(!parameters.empty()){
-            cerr <<"常数不可作为函数："<<identifier<<" ！\n";
+            cout <<"常数不可作为函数："<<identifier<<" ！\n";
             _is_grammar_correct = false;
             return INFINITY;
         }
         return (double) std::stoi(identifier);
     } else {
-        cerr<<"未知函数："<<identifier<<"！\n";
+        cout<<"未知函数："<<identifier<<"！\n";
         _is_grammar_correct = false;
         return INFINITY;
     }
@@ -118,9 +108,8 @@ auto ds::Calculator::evaluate(const Expression& expr) -> double{
 auto ds::Calculator::calculate_add(
     const Parameter_list& parameters
 )-> double{
-    
     double result{0.0};
-    for(auto& expr : parameters){
+    for(const auto& expr : parameters){
         result += evaluate(expr);
     }
     return result;
@@ -129,10 +118,9 @@ auto ds::Calculator::calculate_add(
 auto ds::Calculator::calculate_sub(
     const Parameter_list& parameters
 ) -> double {
-    
     if (parameters.empty()){
         _is_grammar_correct = false;
-        cerr<<"sub函数至少需要一个参数！\n";
+        cout<<"sub函数至少需要一个参数！\n";
         _is_grammar_correct = false;
         return INFINITY;
     }
@@ -163,7 +151,7 @@ auto ds::Calculator::calculate_div(
     const Parameter_list& parameters
 ) -> double {
     if(parameters.size() != 2){
-        cerr<<"div函数只接受两个参数！\n";
+        cout<<"div函数只接受两个参数！\n";
         _is_grammar_correct = false;
         return INFINITY;
     }

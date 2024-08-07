@@ -14,23 +14,21 @@
 #include <queue>
 
 namespace ds {
-
 struct Calculator{
 private:
-    using Token_Q = std::queue<std::string>;
     using string = std::string;
     using Expression = Tree<string>::Node;
     using Parameter_list = Tree<string>::Node::Child_list;
     
-    Expression grammar_tree;
-    
+    Expression _grammar_tree; //语法树
+    std::queue<string> _token_queue; //词符队列
     bool _is_grammar_correct {true};
-    double _result;
+    double _result; //计算结果
     
-    auto parse(const string&) -> Expression;
-    auto tokenize(const string&) -> Token_Q;
-    auto analyze(Token_Q&) -> Expression;
-    auto analyze_para(Token_Q&) -> Parameter_list;
+    void parse(const string&);
+    void tokenize(const string&);
+    auto analyze() -> Expression ;
+    auto analyze_para() -> Parameter_list;
     
     auto evaluate(const Expression&) -> double;
     auto calculate_add(const Parameter_list&) -> double;
@@ -40,10 +38,8 @@ private:
     
 public:
     Calculator(const string&);
-    
     double get_result(){return _result;}
 };
-
 }
 
 #endif /* Calculator_hpp */
