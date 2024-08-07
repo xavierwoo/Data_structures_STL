@@ -9,9 +9,7 @@
 #define ds_heap_h
 
 #include <cassert>
-#include "ds_vector.h"
 
-//此文件函数需要使用 ds::vector::iterator - ds::vector::iterator 操作符
 namespace ds {
 
 template <
@@ -20,7 +18,10 @@ template <
         typename Iterator::value_type
     >
 >
-void push_heap(Iterator, Iterator, Comparator = Comparator());
+void push_heap(
+        const Iterator, const Iterator,
+        const Comparator = Comparator()
+);
 
 template <
     typename Iterator,
@@ -28,7 +29,10 @@ template <
         typename Iterator::value_type
     >
 >
-void pop_heap(Iterator, Iterator, Comparator = Comparator());
+void pop_heap(
+        const Iterator, const Iterator,
+        const Comparator = Comparator()
+);
 
 template <
     typename Iterator,
@@ -36,26 +40,28 @@ template <
         typename Iterator::value_type
     >
 >
-void make_heap(Iterator, Iterator, Comparator = Comparator());
+void make_heap(
+        const Iterator, const Iterator,
+        const Comparator = Comparator()
+);
 
 template <typename Iterator,typename Comparator>
-void heap_percolate_down(Iterator, Iterator, Iterator, Comparator);
+void heap_percolate_down(
+        const Iterator, const Iterator,Iterator, const Comparator
+);
 
 }//namespace ds
 
 template <typename Iterator, typename Comparator>
 void ds::push_heap(
-    Iterator first,
-    Iterator last,
-    Comparator cmpr
+    const Iterator first,
+    const Iterator last,
+    const Comparator cmpr
 ){
     if (first == last) return;
-    
-    auto child_pos {last - 1 - first};
+    auto child_pos {last - 1 - first};//待插入堆的元素
     auto parent_pos {(child_pos - 1) / 2};
-    
-    auto temp {std::move(*(first + child_pos))};
-    
+    auto temp {std::move(*(first + child_pos))};//暂存待插入元素
     while(child_pos > 0){
         if(!cmpr(*(first + parent_pos), temp)){
             break;
@@ -64,16 +70,16 @@ void ds::push_heap(
         child_pos = parent_pos;
         parent_pos = (child_pos - 1) / 2;
     }
-    *(first + child_pos) = std::move(temp);
+    *(first + child_pos) = std::move(temp);//将插入元素放到正确的位置
 }
 
 
 template <typename Iterator,typename Comparator>
 void ds::heap_percolate_down(
-    Iterator first,
-    Iterator last,
+    const Iterator first,
+    const Iterator last,
     Iterator iter,
-    Comparator cmpr
+    const Comparator cmpr
 ){
     auto parent_pos {iter - first};
     auto child_pos {parent_pos * 2 + 1};
@@ -103,8 +109,8 @@ void ds::heap_percolate_down(
 template <typename Iterator,typename Comparator>
 void ds::pop_heap(
     Iterator first,
-    Iterator last,
-    Comparator cmpr
+    const Iterator last,
+    const Comparator cmpr
 ) {
     if(first == last) return;
     auto temp {std::move(*first)};
@@ -115,13 +121,13 @@ void ds::pop_heap(
 
 template <typename Iterator, typename Comparator>
 void ds::make_heap(
-    Iterator first,
-    Iterator last,
-    Comparator cmpr
+    const Iterator first,
+    const Iterator last,
+    const Comparator cmpr
 ){
     if (first == last) return;
-    
     const auto size {last - first};
+    //从最后一个非叶子节点开始向下调整
     for(int i = size/2-1; i>=0; --i){
         heap_percolate_down(first, last-1, first+i, cmpr);
     }
