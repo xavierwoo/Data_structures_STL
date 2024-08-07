@@ -507,12 +507,15 @@ void test_binary_tree(){
     cout<<"测试binary_tree垂直打印：\n";
     bt_from_vec.print(40);
     cout<<'\n';
+
+    cout<<"测试深度求解：\n";
+    cout<<bt_from_vec.get_depth();
 }
 
 void test_huffman_tree(){
     cout<<"测试哈夫曼树：\n";
     std::vector<int> values {7,5,2,4};
-    auto huffman_tree {ds::make_huffman_tree(values)};
+    auto huffman_tree {ds::Binary_tree<int>::make_huffman_tree(values)};
     huffman_tree.print(40);
     cout<<'\n';
 }
@@ -520,14 +523,15 @@ void test_huffman_tree(){
 
 void test_tree(){
     cout<<"测试tree类：\n";
-    ds::Tree<char> tree(new ds::Tree<char>::Node('A', {
-        ds::Tree<char>::Node('B', {
-            ds::Tree<char>::Node('E', {}),
-            ds::Tree<char>::Node('F', {})
+    using TestNode = ds::Tree<char>::Node;
+    ds::Tree<char> tree(new TestNode('A', {
+        TestNode('B', {
+            TestNode('E', {}),
+            TestNode('F', {})
         }),
-        ds::Tree<char>::Node('C', {}),
-        ds::Tree<char>::Node('D', {
-            ds::Tree<char>::Node('G', {})
+        TestNode('C', {}),
+        TestNode('D', {
+            TestNode('G', {})
         })
     }));
     cout<<"\t在此处设置断点，使用watch查看tree的值\n";

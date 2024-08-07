@@ -22,7 +22,7 @@ int main(int argc, const char * argv[]) {
 //
 //    test_vector();
 //    test_forward_list();
-    test_list();
+//    test_list();
 //    test_stack();
 //    test_queue();
 //
@@ -31,7 +31,7 @@ int main(int argc, const char * argv[]) {
 //    test_huffman_tree();
 //
 //    test_tree();
-//    test_calculator();
+    test_calculator();
 //
 //    test_graph();
 //    test_graph_traversal();
