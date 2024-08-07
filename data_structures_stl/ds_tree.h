@@ -18,7 +18,6 @@
 #include "ds_stack.h"
 
 namespace ds {
-
 template <typename T>
 struct Tree{
     struct Node;
@@ -33,16 +32,12 @@ public:
     
     void DFS_pre_order_print_recursive() const;
     void DFS_pre_order_print_iterative() const;
-    
     void DFS_post_order_print_recursive() const;
-    
     void BFS_print() const;
 };
-
 }
 
 namespace ds {
-
 template <typename T>
 struct Tree<T>::Node{
     
@@ -56,7 +51,6 @@ struct Tree<T>::Node{
     Node(const T& d, const Child_list& c)
         :data(d), children(c){}
 };
-
 }
 
 //****************Tree<T>成员函数实现*******************/
@@ -65,8 +59,7 @@ void ds::Tree<T>::dfs_pre_order_recur(
     const Node& node
 ){
     std::cout<<node.data<<' ';
-    
-    for(auto& c : node.children){
+    for(const auto& c : node.children){
         dfs_pre_order_recur(c);
     }
 }
@@ -81,7 +74,7 @@ void ds::Tree<T>::DFS_pre_order_print_recursive(
 template <typename T>
 void ds::Tree<T>::DFS_pre_order_print_iterative() const {
     if(_root == nullptr) return;
-    std::stack<const Node*> S; //也可以使用ds::stack
+    std::stack<const Node* const> S;
     S.push(_root);
     
     while(!S.empty()){
@@ -90,7 +83,7 @@ void ds::Tree<T>::DFS_pre_order_print_iterative() const {
         
         //若希望遍历顺序与递归方式一致，
         //此处可以逆序将孩子节点指针压入栈
-        for(auto& c : curr->children){
+        for(const auto& c : curr->children){
             S.push(&c);
         }
     }
@@ -100,10 +93,9 @@ template <typename T>
 void ds::Tree<T>::dfs_post_order_recur(
     const Node& node
 ){
-    for(auto& c : node.children){
+    for(const auto& c : node.children){
         dfs_post_order_recur(c);
     }
-    
     std::cout<<node.data<<' ';
 }
 
@@ -117,7 +109,7 @@ void ds::Tree<T>::DFS_post_order_print_recursive(
 template <typename T>
 void ds::Tree<T>::BFS_print() const {
     if(_root == nullptr) return;
-    std::queue<const Node*> Q; //也可以使用ds::vector
+    std::queue<const Node* const> Q;
     Q.push(_root);
     
     while(!Q.empty()){
