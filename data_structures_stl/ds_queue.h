@@ -15,12 +15,17 @@ namespace ds {
 template <typename T>
 struct queue{
 private:
-    list<T> _data;
+    list<T> _data; //也可以使用std::list
 public:
     void push(const T& );
     auto front() -> T&;
     void pop();
-    auto empty() -> bool;
+    auto size() const -> unsigned int{
+        return _data.size();
+    }
+    auto empty() const -> bool{
+        return size() == 0;
+    }
 };
 
 }
@@ -40,11 +45,6 @@ template <typename T>
 void ds::queue<T>::pop(){
     assert(_data.size() > 0 && "队列中没有元素！");
     _data.erase(_data.begin());
-}
-
-template <typename T>
-auto ds::queue<T>::empty() -> bool {
-    return _data.size() == 0;
 }
 
 #endif /* ds_queue_h */
