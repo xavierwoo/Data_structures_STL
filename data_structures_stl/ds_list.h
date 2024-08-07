@@ -26,7 +26,7 @@ public:
     list();
     ~list();
     
-    auto size() -> unsigned int{return _size;}
+    auto size() const -> unsigned int{return _size;}
     void push_back(const T& );
     auto begin() -> iterator;
     auto end() -> iterator;
