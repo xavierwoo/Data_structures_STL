@@ -1,16 +1,16 @@
 //
-//  ds_queue.h
+//  hbut_queue.h
 //  data_structures_stl
 //
 //  Created by 吴 歆韵 on 2024/4/8.
 //
 
-#ifndef ds_queue_h
-#define ds_queue_h
+#ifndef hbut_queue_h
+#define hbut_queue_h
 
-#include "ds_list.h"
+#include "hbut_list.h"
 #include <cassert>
-namespace ds {
+namespace hbut {
 
 template <typename T>
 struct queue{
@@ -31,18 +31,18 @@ public:
 }
 
 template <typename T>
-void ds::queue<T>::push(const T& value){
+void hbut::queue<T>::push(const T& value){
     _data.push_back(value);
 }
 
 template <typename T>
-auto ds::queue<T>::front() -> T&{
+auto hbut::queue<T>::front() -> T&{
     assert(_data.size() > 0 && "队列中没有元素！");
     return *_data.begin();
 }
 
 template <typename T>
-void ds::queue<T>::pop(){
+void hbut::queue<T>::pop(){
     assert(_data.size() > 0 && "队列中没有元素！");
     _data.erase(_data.begin());
 }

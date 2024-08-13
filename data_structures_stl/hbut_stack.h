@@ -1,17 +1,17 @@
 //
-//  ds_stack.h
+//  hbut_stack.h
 //  data_structures_stl
 //
 //  Created by 吴 歆韵 on 2024/4/8.
 //
 
-#ifndef ds_stack_h
-#define ds_stack_h
+#ifndef hbut_stack_h
+#define hbut_stack_h
 
-#include "ds_vector.h"
+#include "hbut_vector.h"
 #include <cassert>
 
-namespace ds{
+namespace hbut{
 
 template <typename T>
 struct stack{
@@ -29,18 +29,18 @@ public:
 }
 
 template <typename T>
-void ds::stack<T>::push(const T& value){
+void hbut::stack<T>::push(const T& value){
     _data.push_back(value);
 }
 
 template <typename T>
-auto ds::stack<T>::top() -> T&{
+auto hbut::stack<T>::top() -> T&{
     assert(_data.size() > 0 && "栈中没有元素！");
     return _data[_data.size() - 1];
 }
 
 template <typename T>
-void ds::stack<T>::pop(){
+void hbut::stack<T>::pop(){
     assert(_data.size() > 0 && "栈中没有元素！");
     _data.erase(_data.end()-1);
 }

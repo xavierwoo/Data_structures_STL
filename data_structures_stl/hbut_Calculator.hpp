@@ -1,19 +1,19 @@
 //
-//  ds_Calculator.hpp
+//  hbut_Calculator.hpp
 //  data_structures_stl
 //
 //  Created by 吴 歆韵 on 2024/5/15.
 //
 
-#ifndef ds_Calculator_hpp
-#define ds_Calculator_hpp
+#ifndef hbut_Calculator_hpp
+#define hbut_Calculator_hpp
 
-#include "ds_tree.h"
-#include "ds_queue.h"
+#include "hbut_tree.h"
+#include "hbut_queue.h"
 #include <string>
 #include <queue>
 
-namespace ds {
+namespace hbut {
 struct Calculator{
 private:
     using string = std::string;

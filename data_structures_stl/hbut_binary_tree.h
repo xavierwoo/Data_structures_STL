@@ -1,12 +1,12 @@
 //
-//  ds_binary_tree.h
+//  hbut_binary_tree.h
 //  data_structures_stl
 //
 //  Created by 吴 歆韵 on 2024/4/23.
 //
 
-#ifndef ds_binary_tree_h
-#define ds_binary_tree_h
+#ifndef hbut_binary_tree_h
+#define hbut_binary_tree_h
 
 #include <vector>
 #include <queue>
@@ -15,7 +15,7 @@
 #include <utility>
 #include <algorithm>
 
-namespace ds {
+namespace hbut {
 template <typename T>
 struct Binary_tree{
     struct Node;
@@ -52,7 +52,7 @@ public:
 };
 }
 
-namespace ds {
+namespace hbut {
 template <typename T>
 struct Binary_tree<T>::Node{
     T data;
@@ -63,7 +63,7 @@ struct Binary_tree<T>::Node{
 };
 }
 
-namespace ds {
+namespace hbut {
 template <typename T>
 struct Binary_tree<T>::Location{
     unsigned int indent; //光标缩进
@@ -71,7 +71,7 @@ struct Binary_tree<T>::Location{
 };
 }
 
-namespace ds {
+namespace hbut {
 template <typename T>
 struct Binary_tree<T>::HuffmanComparator{
     auto operator()(
@@ -85,7 +85,7 @@ struct Binary_tree<T>::HuffmanComparator{
 
 //*********************Binary_tree成员函数实现*******************
 template <typename T>
-void ds::Binary_tree<T>::delete_node_recur(
+void hbut::Binary_tree<T>::delete_node_recur(
     const Node* node
 ){
     if(node == nullptr) return;
@@ -95,12 +95,12 @@ void ds::Binary_tree<T>::delete_node_recur(
 }
 
 template <typename T>
-ds::Binary_tree<T>::~Binary_tree(){
+hbut::Binary_tree<T>::~Binary_tree(){
     delete_node_recur(_root);
 }
 
 template <typename T>
-ds::Binary_tree<T>::Binary_tree(
+hbut::Binary_tree<T>::Binary_tree(
     const std::vector<T>& vec,
     const T& void_value
 ){
@@ -131,7 +131,7 @@ ds::Binary_tree<T>::Binary_tree(
 }
 
 template <typename T>
-void ds::Binary_tree<T>::level_traversal_print() const {
+void hbut::Binary_tree<T>::level_traversal_print() const {
     if(_root == nullptr)return;
     std::queue<const Node* const> Q;
     Q.push(_root);
@@ -144,7 +144,7 @@ void ds::Binary_tree<T>::level_traversal_print() const {
 }
 
 template <typename T>
-void ds::Binary_tree<T>::pre_order_recur(
+void hbut::Binary_tree<T>::pre_order_recur(
     const Node* const node
 ){
     if(node == nullptr) return;
@@ -155,13 +155,13 @@ void ds::Binary_tree<T>::pre_order_recur(
 }
 
 template <typename T>
-void ds::Binary_tree<T>::pre_order_traversal_print_recursive(
+void hbut::Binary_tree<T>::pre_order_traversal_print_recursive(
 )const{
     pre_order_recur(_root);
 }
 
 template <typename T>
-void ds::Binary_tree<T>::pre_order_traversal_print_iterative(
+void hbut::Binary_tree<T>::pre_order_traversal_print_iterative(
 )const{
     if(_root == nullptr) return;
     std::stack<const Node* const> S;
@@ -175,7 +175,7 @@ void ds::Binary_tree<T>::pre_order_traversal_print_iterative(
 }
 
 template <typename T>
-void ds::Binary_tree<T>::in_order_recur(
+void hbut::Binary_tree<T>::in_order_recur(
     const Node* const node
 ){
     if(node == nullptr) return;
@@ -186,13 +186,13 @@ void ds::Binary_tree<T>::in_order_recur(
 }
 
 template <typename T>
-void ds::Binary_tree<T>::in_order_traversal_print_recursive(
+void hbut::Binary_tree<T>::in_order_traversal_print_recursive(
 ) const {
     in_order_recur(_root);
 }
 
 template <typename T>
-void ds::Binary_tree<T>::in_order_traversal_print_iterative(
+void hbut::Binary_tree<T>::in_order_traversal_print_iterative(
 ) const {
     if(_root == nullptr) return;
     std::stack<const Node* const> S;
@@ -213,7 +213,7 @@ void ds::Binary_tree<T>::in_order_traversal_print_iterative(
 }
 
 template <typename T>
-void ds::Binary_tree<T>::post_order_recur(
+void hbut::Binary_tree<T>::post_order_recur(
     const Node* const node
 ){
     if(node == nullptr)return;
@@ -224,13 +224,13 @@ void ds::Binary_tree<T>::post_order_recur(
 }
 
 template <typename T>
-void ds::Binary_tree<T>::post_order_traversal_print_recursive(
+void hbut::Binary_tree<T>::post_order_traversal_print_recursive(
 ) const {
     post_order_recur(_root);
 }
 
 template <typename T>
-void ds::Binary_tree<T>::post_order_traversal_print_iterative(
+void hbut::Binary_tree<T>::post_order_traversal_print_iterative(
 ) const {
     if(_root == nullptr) return;
     std::stack<const Node* const> S;
@@ -257,7 +257,7 @@ void ds::Binary_tree<T>::post_order_traversal_print_iterative(
 }
 
 template <typename T>
-auto ds::Binary_tree<T>::get_depth_recur(
+auto hbut::Binary_tree<T>::get_depth_recur(
     const Node* const node
 ) -> unsigned int{
     if (node == nullptr){
@@ -270,13 +270,13 @@ auto ds::Binary_tree<T>::get_depth_recur(
 }
 
 template <typename T>
-auto ds::Binary_tree<T>::get_depth(
+auto hbut::Binary_tree<T>::get_depth(
 ) const -> unsigned int {
     return get_depth_recur(_root);
 }
 
 template <typename T>
-void ds::Binary_tree<T>::print(const unsigned int screenwidth) const {
+void hbut::Binary_tree<T>::print(const unsigned int screenwidth) const {
     if(_root == nullptr) return;
     std::cout<<'\n';
     unsigned int curr_level {0}; //记录当前打印的层
@@ -317,7 +317,7 @@ void ds::Binary_tree<T>::print(const unsigned int screenwidth) const {
 //***************Huffman Code函数实现**********************
 
 template <typename T>
-auto ds::Binary_tree<T>::make_huffman_tree(
+auto hbut::Binary_tree<T>::make_huffman_tree(
     const std::vector<T>& values
 ) -> Binary_tree <T> {
     std::priority_queue<Node*,

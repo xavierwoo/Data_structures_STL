@@ -6,17 +6,17 @@
 //
 
 #include "test.hpp"
-#include "ds_vector.h"
-#include "ds_forward_list.h"
-#include "ds_list.h"
-#include "ds_stack.h"
-#include "ds_queue.h"
-#include "ds_heap.h"
-#include "ds_binary_tree.h"
-#include "ds_tree.h"
-#include "ds_Calculator.hpp"
-#include "ds_graph.h"
-#include "ds_algorithms.h"
+#include "hbut_vector.h"
+#include "hbut_forward_list.h"
+#include "hbut_list.h"
+#include "hbut_stack.h"
+#include "hbut_queue.h"
+#include "hbut_heap.h"
+#include "hbut_binary_tree.h"
+#include "hbut_tree.h"
+#include "hbut_Calculator.hpp"
+#include "hbut_graph.h"
+#include "hbut_algorithms.h"
 #include <iostream>
 #include <vector>
 #include <forward_list>
@@ -28,9 +28,9 @@
 
 using std::cout;
 
-auto test_push_back_vector() -> ds::vector<int>{
+auto test_push_back_vector() -> hbut::vector<int>{
     cout<<"测试vector::push_back函数：\n";
-    ds::vector<int> vec;
+    hbut::vector<int> vec;
     vec.push_back(1);
     vec.push_back(2);
     vec.push_back(3);
@@ -43,7 +43,7 @@ auto test_push_back_vector() -> ds::vector<int>{
 
 void test_traversal_vector_iterator(){
     cout<<"测试使用迭代器遍历vector：\n\t";
-    ds::vector<int> vec;
+    hbut::vector<int> vec;
     vec.push_back(1);
     vec.push_back(2);
     vec.push_back(3);
@@ -59,7 +59,7 @@ void test_traversal_vector_iterator(){
 
 void test_traversal_vector_grammar_sugar(){
     cout<<"测试使用迭代器语法糖遍历vector：\n\t";
-    ds::vector<int> vec;
+    hbut::vector<int> vec;
     vec.push_back(1);
     vec.push_back(2);
     vec.push_back(3);
@@ -80,7 +80,7 @@ void test_traversal_vector_grammar_sugar(){
 
 void test_traversal_vector_index(){
     cout<<"测试使用下标遍历vector：\n\t";
-    ds::vector<int> vec;
+    hbut::vector<int> vec;
     vec.push_back(1);
     vec.push_back(2);
     vec.push_back(3);
@@ -97,7 +97,7 @@ void test_traversal_vector_index(){
 
 void test_vector_iterator_calculation(){
     cout<<"测试vector迭代器运算：\n";
-    ds::vector<int> vec;
+    hbut::vector<int> vec;
     vec.push_back(1);
     vec.push_back(2);
     vec.push_back(3);
@@ -118,7 +118,7 @@ void test_vector_iterator_calculation(){
 
 void test_vector_erase(){
     cout<<"测试vector删除元素：\n\t";
-    ds::vector<int> vec;
+    hbut::vector<int> vec;
     vec.push_back(1);
     vec.push_back(2);
     vec.push_back(3);
@@ -135,7 +135,7 @@ void test_vector_erase(){
 
 void test_vector_insert(){
     cout<<"测试vector添加元素：\n\t";
-    ds::vector<int> vec;
+    hbut::vector<int> vec;
     vec.push_back(1);
     vec.push_back(2);
     vec.push_back(3);
@@ -151,14 +151,14 @@ void test_vector_insert(){
 
 void test_vector_assignment(){
     cout<<"测试vector =操作符：\n\t";
-    ds::vector<int> vec1;
+    hbut::vector<int> vec1;
     vec1.push_back(1);
     vec1.push_back(2);
     vec1.push_back(3);
     vec1.push_back(4);
     vec1.push_back(5);
     
-    ds::vector<int> vec2;
+    hbut::vector<int> vec2;
     vec2 = vec1;
     cout<<"vec2为{";
     for(auto e : vec2) cout<<e<<' ';
@@ -177,8 +177,8 @@ void test_vector_assignment(){
 
 void test_vector_move_semantic(){
     cout<<"测试vector移动语义：\n";
-    ds::vector<int> vec1 {1,2,3,4};
-    ds::vector<int> vec2 {std::move(vec1)};
+    hbut::vector<int> vec1 {1, 2, 3, 4};
+    hbut::vector<int> vec2 {std::move(vec1)};
     
     cout<<"\t vec1.size="<<vec1.size();
     cout<<"\n\t vec2.size="<<vec2.size();
@@ -198,7 +198,7 @@ void test_vector(){
 
 void test_forward_list_push_front_and_traversal(){
     cout<<"测试 forward_list::push_front：\n";
-    ds::forward_list<int> lst;
+    hbut::forward_list<int> lst;
     lst.push_front(1);
     lst.push_front(2);
     lst.push_front(3);
@@ -215,7 +215,7 @@ void test_forward_list_push_front_and_traversal(){
 
 void test_forward_list_insert_after(){
     cout<<"测试 forward_list::insert_after：\n";
-    ds::forward_list<int> lst;
+    hbut::forward_list<int> lst;
     lst.push_front(1);
     lst.push_front(2);
     lst.push_front(3);
@@ -238,7 +238,7 @@ void test_forward_list_insert_after(){
 
 void test_forward_list_erase_after(){
     cout<<"测试 forward_list::erase_after：\n";
-    ds::forward_list<int> lst;
+    hbut::forward_list<int> lst;
     lst.push_front(1);
     lst.push_front(2);
     lst.push_front(3);
@@ -260,7 +260,7 @@ void test_forward_list_erase_after(){
 
 void test_forward_list_reverse(){
     cout<<"测试 forward_list::reverse：\n";
-    ds::forward_list<int> lst;
+    hbut::forward_list<int> lst;
     lst.push_front(1);
     lst.push_front(2);
     lst.push_front(3);
@@ -285,7 +285,7 @@ void test_forward_list(){
 //using std::list;
 void test_list_push_back(){
     cout<<"测试 list::push_back：\n";
-    ds::list<int> lst;
+    hbut::list<int> lst;
     lst.push_back(1);
     lst.push_back(2);
     lst.push_back(3);
@@ -296,7 +296,7 @@ void test_list_push_back(){
 
 void test_list_traversal(){
     cout<<"测试使用迭代器遍历list：\n\t";
-    ds::list<int> lst;
+    hbut::list<int> lst;
     lst.push_back(1);
     lst.push_back(2);
     lst.push_back(3);
@@ -318,7 +318,7 @@ void test_list_traversal(){
 
 void test_list_insert(){
     cout<<"测试list::insert：\n\t";
-    ds::list<int> lst;
+    hbut::list<int> lst;
     lst.push_back(1);
     lst.push_back(2);
     lst.push_back(3);
@@ -334,7 +334,7 @@ void test_list_insert(){
 
 void test_list_erase(){
     cout<<"测试list::erase：\n\t";
-    ds::list<int> lst;
+    hbut::list<int> lst;
     lst.push_back(1);
     lst.push_back(2);
     lst.push_back(3);
@@ -363,7 +363,7 @@ void test_list(){
 //using std::stack;
 void test_stack(){
     cout<<"测试stack：\n";
-    ds::stack<int> stk;
+    hbut::stack<int> stk;
     
     stk.push(1);
     stk.push(2);
@@ -382,7 +382,7 @@ void test_stack(){
 //using std::queue;
 void test_queue(){
     cout<<"测试queue：\n";
-    ds::queue<int> que;
+    hbut::queue<int> que;
     
     que.push(1);
     que.push(2);
@@ -400,17 +400,17 @@ void test_queue(){
 
 void test_max_heap(){
     cout<<"测试大根堆：\n\t";
-    ds::vector<int> heap_vec;//
+    hbut::vector<int> heap_vec;//
     heap_vec.push_back(0);
-    ds::push_heap(heap_vec.begin(), heap_vec.end());
+    hbut::push_heap(heap_vec.begin(), heap_vec.end());
     heap_vec.push_back(4);
-    ds::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
+    hbut::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
     heap_vec.push_back(2);
-    ds::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
+    hbut::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
     heap_vec.push_back(1);
-    ds::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
+    hbut::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
     heap_vec.push_back(3);
-    ds::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
+    hbut::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
     for(auto e : heap_vec)cout<<e<<' ';
     cout<<"\n";
 }
@@ -418,55 +418,55 @@ void test_max_heap(){
 
 void test_heap(){;
     cout<<"测试push_heap：\n\t大根堆：";
-    ds::vector<int> heap_vec;
+    hbut::vector<int> heap_vec;
     heap_vec.push_back(0);
-    ds::push_heap(heap_vec.begin(), heap_vec.end());
+    hbut::push_heap(heap_vec.begin(), heap_vec.end());
     heap_vec.push_back(4);
-    ds::push_heap(heap_vec.begin(), heap_vec.end());
+    hbut::push_heap(heap_vec.begin(), heap_vec.end());
     heap_vec.push_back(2);
-    ds:: push_heap(heap_vec.begin(), heap_vec.end());
+    hbut:: push_heap(heap_vec.begin(), heap_vec.end());
     heap_vec.push_back(1);
-    ds::push_heap(heap_vec.begin(), heap_vec.end());
+    hbut::push_heap(heap_vec.begin(), heap_vec.end());
     heap_vec.push_back(3);
-    ds::push_heap(heap_vec.begin(), heap_vec.end());
+    hbut::push_heap(heap_vec.begin(), heap_vec.end());
     for(auto e : heap_vec)cout<<e<<' ';
     cout<<"\n";
     
     heap_vec.clear();
     heap_vec.push_back(3);
-    ds::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
+    hbut::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
     heap_vec.push_back(4);
-    ds::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
+    hbut::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
     heap_vec.push_back(2);
-    ds::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
+    hbut::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
     heap_vec.push_back(1);
-    ds::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
+    hbut::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
     heap_vec.push_back(0);
-    ds::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
+    hbut::push_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
     cout<<"\t小根堆：";
     for(auto e : heap_vec)cout<<e<<' ';
     cout<<"\n";
    
     cout<<"测试pop_heap：\n\t";
-    ds::pop_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
+    hbut::pop_heap(heap_vec.begin(), heap_vec.end(), std::greater<int>());
     for(auto e : heap_vec)cout<<e<<' ';
     cout<<'\n';
     
     cout<<"测试make_heap：\n\t";
-    ds::vector<int> heap;
+    hbut::vector<int> heap;
     heap.push_back(3);
     heap.push_back(4);
     heap.push_back(2);
     heap.push_back(1);
     heap.push_back(0);
-    ds::make_heap(heap.begin(), heap.end());
+    hbut::make_heap(heap.begin(), heap.end());
     for(auto e : heap)cout<<e<<' ';
     cout<<'\n';
 
 }
 
 void test_binary_tree(){
-    using ds::Binary_tree;
+    using hbut::Binary_tree;
     cout<<"测试binary_tree：\n";
     Binary_tree<char> bt(new Binary_tree<char>::Node('A',
                                                      new Binary_tree<char>::Node('B'),
@@ -515,7 +515,7 @@ void test_binary_tree(){
 void test_huffman_tree(){
     cout<<"测试哈夫曼树：\n";
     std::vector<int> values {7,5,2,4};
-    auto huffman_tree {ds::Binary_tree<int>::make_huffman_tree(values)};
+    auto huffman_tree {hbut::Binary_tree<int>::make_huffman_tree(values)};
     huffman_tree.print(40);
     cout<<'\n';
 }
@@ -523,8 +523,8 @@ void test_huffman_tree(){
 
 void test_tree(){
     cout<<"测试tree类：\n";
-    using TestNode = ds::Tree<char>::Node;
-    ds::Tree<char> tree(new TestNode('A', {
+    using TestNode = hbut::Tree<char>::Node;
+    hbut::Tree<char> tree(new TestNode('A', {
         TestNode('B', {
             TestNode('E', {}),
             TestNode('F', {})
@@ -553,26 +553,26 @@ void test_calculator(){
     cout<<"测试Calculator：\n";
     std::string expression{"add ( sub(2,4) , 2 , mul (2,6), div(4,3))"};
     cout<<"\t计算："<<expression;
-    ds::Calculator calc(expression);
+    hbut::Calculator calc(expression);
     cout<<"\n\t计算结果为："<<calc.get_result();
     
     cout<<"\n\n";
     std::string expression2{"add ( sub() , 2 , mul (2,6), div(4,3,5))"};
     cout<<"\t计算："<<expression2<<"\n\t";
-    ds::Calculator calc2(expression2);
+    hbut::Calculator calc2(expression2);
     cout<<"\n\t计算结果为："<<calc2.get_result();
     
     cout<<"\n\n";
     std::string expression3{"add sub() , 2 , mul (2,6), div(4,3,5))"};
     cout<<"\t计算："<<expression3<<"\n\t";
-    ds::Calculator calc3(expression3);
+    hbut::Calculator calc3(expression3);
     cout<<"\n\t计算结果为："<<calc3.get_result();
     
     cout<<"\n";
 }
 
 auto create_test_graph(){
-    ds::Graph<std::string> g;
+    hbut::Graph<std::string> g;
     g.add_vertex("A");
     g.add_vertex("B");
     g.add_vertex("C");
@@ -602,7 +602,7 @@ auto create_test_graph(){
 
 void test_graph(){
     cout<<"测试Graph：\n";
-    ds::Graph<std::string> g{create_test_graph()};
+    hbut::Graph<std::string> g{create_test_graph()};
     
     cout<<"\t边(A,B)的权值为："<<g.get_edge_weight("A", "B");
     cout<<"\n\t边(B,C)的权值为："<<g.get_edge_weight("B", "C");
@@ -619,7 +619,7 @@ void test_graph(){
 
 void test_graph_traversal(){
     cout<<"测试Graph遍历算法：\n";
-    ds::Graph<std::string> g{create_test_graph()};
+    hbut::Graph<std::string> g{create_test_graph()};
     
     cout<<"\n\t广度优先遍历：";
     g.BFS_print("A");
@@ -634,7 +634,7 @@ void test_graph_traversal(){
 
 void test_shortest_path(){
     cout<<"测试Graph最短路径：\n";
-    ds::Graph<std::string> g{create_test_graph()};
+    hbut::Graph<std::string> g{create_test_graph()};
     
     auto [path, weight] {g.shortest_path("A", "C")};
     cout<<"\tA到C的最短路径为：";
@@ -659,8 +659,8 @@ void test_min_spanning_tree(){
     cout<<'\n';
 }
 
-auto create_test_AOE_graph() -> ds::Graph<std::string>{
-    ds::Graph<std::string> g;
+auto create_test_AOE_graph() -> hbut::Graph<std::string>{
+    hbut::Graph<std::string> g;
     
     g.add_vertex("A");
     g.add_vertex("B");
@@ -698,18 +698,18 @@ void test_critical_path(){
 }
 
 void test_static_data_structure_search(){
-    ds::vector<int> data {1,2,4,5,6,9,12};
+    hbut::vector<int> data {1, 2, 4, 5, 6, 9, 12};
     cout<<"测试顺序查找：\n";
     
     for (int value : {1,3,9,10}){
-        cout<<"\t查找"<<value<<": "
-        <<(ds::find(data.begin(), data.end(), value)!= data.end())<<"\n";
+        cout << "\t查找" << value << ": "
+             << (hbut::find(data.begin(), data.end(), value) != data.end()) << "\n";
     }
     
     cout<<"测试二分查找：\n";
     
     for (int value : {1,3,9,10}){
-        cout<<"\t查找"<<value<<": "
-        <<ds::binary_search(data.begin(), data.end(), value)<<"\n";
+        cout << "\t查找" << value << ": "
+             << hbut::binary_search(data.begin(), data.end(), value) << "\n";
     }
 }

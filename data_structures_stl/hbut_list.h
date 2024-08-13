@@ -1,17 +1,17 @@
 //
-//  ds_list.h
+//  hbut_list.h
 //  data_structures_stl
 //
 //  Created by 吴 歆韵 on 2024/4/6.
 //
 
-#ifndef ds_list_h
-#define ds_list_h
+#ifndef hbut_list_h
+#define hbut_list_h
 
 #include <optional>
 #include <cassert>
 
-namespace ds {
+namespace hbut {
 
 template <typename T>
 struct list{
@@ -36,7 +36,7 @@ public:
 
 }
 
-namespace ds {
+namespace hbut {
 
 template <typename T>
 struct list<T>::Node{
@@ -50,7 +50,7 @@ struct list<T>::Node{
 
 }
 
-namespace ds {
+namespace hbut {
 
 template <typename T>
 struct list<T>::iterator{
@@ -70,7 +70,7 @@ public:
 
 //********** ds::list 成员函数实现********************
 template <typename T>
-ds::list<T>::list():_size(0){
+hbut::list<T>::list():_size(0){
     _head = new Node();
     _tail = new Node();
     _head->next = _tail;
@@ -78,7 +78,7 @@ ds::list<T>::list():_size(0){
 }
 
 template <typename T>
-ds::list<T>::~list(){
+hbut::list<T>::~list(){
     Node* curr {_head};
     while(curr != nullptr){
         auto next {curr->next};
@@ -88,7 +88,7 @@ ds::list<T>::~list(){
 }
 
 template <typename T>
-void ds::list<T>::push_back(const T& value){
+void hbut::list<T>::push_back(const T& value){
     auto new_node {new Node(value)};
     
     new_node->next = _tail;
@@ -99,18 +99,18 @@ void ds::list<T>::push_back(const T& value){
 }
 
 template <typename T>
-auto ds::list<T>::begin() -> iterator{
+auto hbut::list<T>::begin() -> iterator{
     return iterator(_head->next);
 }
 
 template <typename T>
-auto ds::list<T>::end() -> iterator{
+auto hbut::list<T>::end() -> iterator{
     return iterator(_tail);
 }
 
 //在pos位前插入value
 template <typename T>
-auto ds::list<T>::insert(
+auto hbut::list<T>::insert(
     const iterator pos,
     const T& value)
 -> iterator {
@@ -130,7 +130,7 @@ auto ds::list<T>::insert(
 }
 
 template <typename T>
-auto ds::list<T>::erase(
+auto hbut::list<T>::erase(
     const iterator pos
 ) -> iterator {
     
@@ -145,27 +145,27 @@ auto ds::list<T>::erase(
 //********** ds::list<T>::iterator 成员函数实现********************
 
 template <typename T>
-auto ds::list<T>::iterator::operator++() -> iterator& {
+auto hbut::list<T>::iterator::operator++() -> iterator& {
     assert(_curr->next != nullptr && "当前迭代器没有后继！");
     _curr = _curr->next;
     return *this;
 }
 
 template <typename T>
-auto ds::list<T>::iterator::operator--() -> iterator& {
+auto hbut::list<T>::iterator::operator--() -> iterator& {
     assert(_curr->prev != nullptr && "当前迭代器没有前驱！");
     _curr = _curr->prev;
     return *this;
 }
 
 template <typename T>
-auto ds::list<T>::iterator::operator*() -> T&{
+auto hbut::list<T>::iterator::operator*() -> T&{
     assert(_curr->data != std::nullopt && "当前迭代器没有值！");
     return _curr->data.value();
 }
 
 template <typename T>
-auto ds::list<T>::iterator::operator!=(
+auto hbut::list<T>::iterator::operator!=(
     const iterator other
 ) -> bool {
     

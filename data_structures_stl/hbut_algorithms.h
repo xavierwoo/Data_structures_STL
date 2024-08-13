@@ -1,16 +1,16 @@
 //
-//  ds_algorithms.h
+//  hbut_algorithms.h
 //  data_structures_stl
 //
 //  Created by 吴 歆韵 on 2024/5/21.
 //
 
-#ifndef ds_algorithms_h
-#define ds_algorithms_h
+#ifndef hbut_algorithms_h
+#define hbut_algorithms_h
 
 #include<vector>
 
-namespace ds {
+namespace hbut {
 
 template <typename Iterator, typename T>
 auto find(const Iterator, const Iterator, const T&) -> Iterator;
@@ -35,7 +35,7 @@ void hanoi(const int , const char , const char , const char );
 }
 
 template <typename Iterator, typename T>
-auto ds::find(
+auto hbut::find(
     const Iterator begin,
     const Iterator end,
     const T& value
@@ -47,7 +47,7 @@ auto ds::find(
 }
 
 template <typename Iterator, typename T>
-auto ds::binary_search(
+auto hbut::binary_search(
     const Iterator begin,
     const Iterator end,
     const T& value
@@ -69,7 +69,7 @@ auto ds::binary_search(
 }
 
 template<typename T>
-void ds::power_set_recur(
+void hbut::power_set_recur(
     const std::vector<T>& ori_set,
     const unsigned int pos,
     std::vector<T>& curr_set,
@@ -86,7 +86,7 @@ void ds::power_set_recur(
 }
 
 template <typename T>
-auto ds::get_power_set(
+auto hbut::get_power_set(
     const std::vector<T>& ori_set
 ) -> std::vector<std::vector<T>>{
 

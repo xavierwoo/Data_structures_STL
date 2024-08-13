@@ -1,18 +1,18 @@
 //
-//  ds_forward_list.h
+//  hbut_forward_list.h
 //  data_structures_stl
 //  单链表 std::forward_list 模拟
 //
 //  Created by 吴 歆韵 on 2024/4/5.
 //
 
-#ifndef ds_forward_list_h
-#define ds_forward_list_h
+#ifndef hbut_forward_list_h
+#define hbut_forward_list_h
 
 #include <optional>
 #include <cassert>
 
-namespace ds {
+namespace hbut {
 
 template <typename T>
 struct forward_list{
@@ -36,7 +36,7 @@ public:
 
 }//namespace ds
 
-namespace ds {
+namespace hbut {
 
 template <typename T>
 struct forward_list<T>::Node{
@@ -49,7 +49,7 @@ struct forward_list<T>::Node{
 
 }//namespace ds
 
-namespace ds {
+namespace hbut {
 
 template <typename T>
 struct forward_list<T>::iterator{
@@ -68,14 +68,14 @@ public:
 
 //********** ds::forward_list 成员函数实现********************
 template <typename T>
-ds::forward_list<T>::forward_list(){
+hbut::forward_list<T>::forward_list(){
     _head = new Node();
     _tail = new Node();
     _head->next = _tail;
 }
 
 template <typename T>
-ds::forward_list<T>::~forward_list(){
+hbut::forward_list<T>::~forward_list(){
     Node* curr {_head};
     while(curr != nullptr){
         auto next {curr->next};
@@ -85,7 +85,7 @@ ds::forward_list<T>::~forward_list(){
 }
 
 template <typename T>
-void ds::forward_list<T>::push_front(
+void hbut::forward_list<T>::push_front(
     const T& value
 ){
     auto new_node{new Node(value)};
@@ -94,17 +94,17 @@ void ds::forward_list<T>::push_front(
 }
 
 template <typename T>
-auto ds::forward_list<T>::begin() -> iterator{
+auto hbut::forward_list<T>::begin() -> iterator{
     return iterator(_head->next);
 }
 
 template <typename T>
-auto ds::forward_list<T>::end() -> iterator{
+auto hbut::forward_list<T>::end() -> iterator{
     return iterator(_tail);
 }
 
 template <typename T>
-auto ds::forward_list<T>::insert_after(
+auto hbut::forward_list<T>::insert_after(
     const iterator pos,
     const T& value
 ) -> iterator {
@@ -116,7 +116,7 @@ auto ds::forward_list<T>::insert_after(
 }
 
 template <typename T>
-auto ds::forward_list<T>::erase_after(
+auto hbut::forward_list<T>::erase_after(
     const iterator pos
 ) -> iterator {
 
@@ -131,7 +131,7 @@ auto ds::forward_list<T>::erase_after(
 }
 
 template <typename T>
-void ds::forward_list<T>::reverse(){
+void hbut::forward_list<T>::reverse(){
     auto *new_head {new Node()};
     new_head->next = _tail;
 
@@ -148,7 +148,7 @@ void ds::forward_list<T>::reverse(){
 
 //********** ds::forward_list::iterator 成员函数实现********************
 template <typename T>
-auto ds::forward_list<T>::iterator::operator++(
+auto hbut::forward_list<T>::iterator::operator++(
 ) -> iterator&{
 
     assert(_curr != nullptr
@@ -158,7 +158,7 @@ auto ds::forward_list<T>::iterator::operator++(
 }
 
 template <typename T>
-auto ds::forward_list<T>::iterator::operator*(
+auto hbut::forward_list<T>::iterator::operator*(
 ) -> T&{
 
     assert(_curr->data != std::nullopt
@@ -167,7 +167,7 @@ auto ds::forward_list<T>::iterator::operator*(
 }
 
 template <typename T>
-auto ds::forward_list<T>::iterator::operator!=(
+auto hbut::forward_list<T>::iterator::operator!=(
     const iterator other
 ) -> bool{
 

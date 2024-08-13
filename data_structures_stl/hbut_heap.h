@@ -1,16 +1,16 @@
 //
-//  ds_heap.h
+//  hbut_heap.h
 //  data_structures_stl
 //
 //  Created by 吴 歆韵 on 2024/4/25.
 //
 
-#ifndef ds_heap_h
-#define ds_heap_h
+#ifndef hbut_heap_h
+#define hbut_heap_h
 
 #include <cassert>
 
-namespace ds {
+namespace hbut {
 
 template <
     typename Iterator,
@@ -53,7 +53,7 @@ void heap_percolate_down(
 }//namespace ds
 
 template <typename Iterator, typename Comparator>
-void ds::push_heap(
+void hbut::push_heap(
     const Iterator first,
     const Iterator last,
     const Comparator cmpr
@@ -75,7 +75,7 @@ void ds::push_heap(
 
 
 template <typename Iterator,typename Comparator>
-void ds::heap_percolate_down(
+void hbut::heap_percolate_down(
     const Iterator first,
     const Iterator last,
     Iterator iter,
@@ -107,7 +107,7 @@ void ds::heap_percolate_down(
 
 //将处于first的元素放到last-1，同时将first到last-2的元素重新调整为堆
 template <typename Iterator,typename Comparator>
-void ds::pop_heap(
+void hbut::pop_heap(
     Iterator first,
     const Iterator last,
     const Comparator cmpr
@@ -120,7 +120,7 @@ void ds::pop_heap(
 }
 
 template <typename Iterator, typename Comparator>
-void ds::make_heap(
+void hbut::make_heap(
     const Iterator first,
     const Iterator last,
     const Comparator cmpr

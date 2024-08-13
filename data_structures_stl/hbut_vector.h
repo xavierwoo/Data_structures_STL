@@ -1,13 +1,13 @@
 //
-//  ds_vector.h
+//  hbut_vector.h
 //  data_structures_stl
 //  顺序表 std::vector 模拟
 //
 //  Created by 吴 歆韵 on 2024/4/2.
 //
 
-#ifndef ds_vector_h
-#define ds_vector_h
+#ifndef hbut_vector_h
+#define hbut_vector_h
 
 #include<cassert>
 #include<cstdlib>
@@ -16,7 +16,7 @@
 //后续课程需要的头文件
 #include<initializer_list>
 
-namespace ds {
+namespace hbut {
 
 template <typename T>
 struct vector{
@@ -55,7 +55,7 @@ public:
 
 }//namespace ds
 
-namespace ds {
+namespace hbut {
 
 template <typename T>
 struct vector<T>::iterator{
@@ -83,7 +83,7 @@ public:
 
 //********** ds::vector 成员函数实现********************
 template <typename T>
-ds::vector<T>::~vector(){
+hbut::vector<T>::~vector(){
     for(int i{0}; i<_size; i++){
         _data[i].~T(); //对当前容器中每一个元素调用析构函数
     }
@@ -91,14 +91,14 @@ ds::vector<T>::~vector(){
 }
 
 template <typename T>
-void ds::vector<T>::reserve(const unsigned int new_cap){
+void hbut::vector<T>::reserve(const unsigned int new_cap){
     assert(new_cap > _capacity && "新容量必须大于原容量");
     _data = (T*)std::realloc(_data, sizeof(T) * new_cap);
     _capacity = new_cap;
 }
 
 template <typename T>
-void ds::vector<T>::push_back(const T& value){
+void hbut::vector<T>::push_back(const T& value){
     if(_size == _capacity){//若容器已满，则进行扩容
         reserve(_capacity*2 + 1);
     }
@@ -107,7 +107,7 @@ void ds::vector<T>::push_back(const T& value){
 }
 
 template <typename T>
-auto ds::vector<T>::operator[](
+auto hbut::vector<T>::operator[](
     const unsigned int index
 ) -> T&{
     assert(index >= 0 && index < _size && "下标越界");
@@ -115,7 +115,7 @@ auto ds::vector<T>::operator[](
 }
 
 template <typename T>
-ds::vector<T>::vector(
+hbut::vector<T>::vector(
     const vector<T> &other
 ){
     if(other.size() == 0) return;
@@ -126,7 +126,7 @@ ds::vector<T>::vector(
 }
 
 template <typename T>
-ds::vector<T>::vector(
+hbut::vector<T>::vector(
     vector<T>&& other
 ) {
     if(other.size() == 0) return;
@@ -139,7 +139,7 @@ ds::vector<T>::vector(
 }
 
 template <typename T>
-ds::vector<T>::vector(
+hbut::vector<T>::vector(
     const unsigned int capacity
 ){
     
@@ -147,7 +147,7 @@ ds::vector<T>::vector(
 }
 
 template <typename T>
-ds::vector<T>::vector(
+hbut::vector<T>::vector(
     const unsigned int number,
     const T &value
 ){
@@ -158,7 +158,7 @@ ds::vector<T>::vector(
 }
 
 template <typename T>
-ds::vector<T>::vector(
+hbut::vector<T>::vector(
     std::initializer_list<T> l
 ) {
     if(l.size() == 0) return;
@@ -169,7 +169,7 @@ ds::vector<T>::vector(
 }
 
 template <typename T>
-void ds::vector<T>::operator=(
+void hbut::vector<T>::operator=(
     const vector<T>& other
 ) {
     
@@ -183,7 +183,7 @@ void ds::vector<T>::operator=(
 }
 
 template <typename T>
-void ds::vector<T>::operator=(vector<T>&& other){
+void hbut::vector<T>::operator=(vector<T>&& other){
     for(auto& e : *this){
         e.~T();
     }
@@ -198,23 +198,23 @@ void ds::vector<T>::operator=(vector<T>&& other){
 }
 
 template <typename T>
-auto ds::vector<T>::size() const -> unsigned int{
+auto hbut::vector<T>::size() const -> unsigned int{
     return _size;
 }
 
 template <typename T>
 //typename ds::vector<T>::iterator ds::vector<T>::begin() const{
-auto ds::vector<T>::begin() const -> iterator{
+auto hbut::vector<T>::begin() const -> iterator{
     return iterator(_data);
 }
 
 template <typename T>
-auto ds::vector<T>::end() const -> iterator{
+auto hbut::vector<T>::end() const -> iterator{
     return iterator(_data + _size);
 }
 
 template <typename T>
-auto ds::vector<T>::erase(
+auto hbut::vector<T>::erase(
     const iterator pos
 ) -> iterator{
     
@@ -238,7 +238,7 @@ auto ds::vector<T>::erase(
 }
 
 template <typename T>
-auto ds::vector<T>::insert(
+auto hbut::vector<T>::insert(
     const iterator pos,
     const T& value
 ) -> iterator{
@@ -260,7 +260,7 @@ auto ds::vector<T>::insert(
 }
 
 template <typename T>
-void ds::vector<T>::clear(){
+void hbut::vector<T>::clear(){
     for(auto i{0}; i<_size; i++){
         _data[i].~T(); //对当前容器中每一个元素调用析构函数
     }
@@ -269,52 +269,52 @@ void ds::vector<T>::clear(){
 
 //********** ds::vector::iterator 成员函数实现*********************
 template <typename T>
-auto ds::vector<T>::iterator::operator++() -> iterator&{
+auto hbut::vector<T>::iterator::operator++() -> iterator&{
     _ptr++;
     return *this;
 }
 
 template <typename T>
-auto ds::vector<T>::iterator::operator--() -> iterator& {
+auto hbut::vector<T>::iterator::operator--() -> iterator& {
     _ptr--;
     return *this;
 }
 
 template <typename T>
-auto ds::vector<T>::iterator::operator*() -> T& {
+auto hbut::vector<T>::iterator::operator*() -> T& {
     return *_ptr;
 }
 
 template <typename T>
-auto ds::vector<T>::iterator::operator==(
+auto hbut::vector<T>::iterator::operator==(
     const iterator other
 ) const -> bool {
     return _ptr == other._ptr;
 }
 
 template <typename T>
-auto ds::vector<T>::iterator::operator!=(
+auto hbut::vector<T>::iterator::operator!=(
     const iterator other
 ) const -> bool {
     return _ptr != other._ptr;
 }
 
 template <typename T>
-auto ds::vector<T>::iterator::operator+(
+auto hbut::vector<T>::iterator::operator+(
     const unsigned int offset
 ) const -> iterator {
     return iterator(_ptr + offset);
 }
 
 template <typename T>
-auto ds::vector<T>::iterator::operator-(
+auto hbut::vector<T>::iterator::operator-(
     const unsigned int offset
 ) const -> iterator {
     return iterator(_ptr - offset);
 }
 
 template <typename T>
-auto ds::vector<T>::iterator::operator-(
+auto hbut::vector<T>::iterator::operator-(
     const iterator other
 ) const -> unsigned int{
     
@@ -322,7 +322,7 @@ auto ds::vector<T>::iterator::operator-(
 }
 
 template <typename T>
-auto ds::vector<T>::iterator::operator>(
+auto hbut::vector<T>::iterator::operator>(
     const iterator other
 ) const -> bool{
     return _ptr > other._ptr;

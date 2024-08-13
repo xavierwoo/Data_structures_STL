@@ -1,17 +1,17 @@
 //
-//  ds_b_tree.h
+//  hbut_b_tree.h
 //  data_structures_stl
 //
 //  Created by 吴 歆韵 on 2024/4/23.
 //
 
-#ifndef ds_b_tree_h
-#define ds_b_tree_h
+#ifndef hbut_b_tree_h
+#define hbut_b_tree_h
 
 #include <vector>
 
 //TODO
-namespace ds {
+namespace hbut {
 template <typename T>
 struct B_tree{
 private:
@@ -21,7 +21,7 @@ private:
 };
 }
 
-namespace ds {
+namespace hbut {
 template <typename T>
 struct B_tree<T>::Node{
     bool is_leaf;

@@ -20,25 +20,25 @@ int main(int argc, const char * argv[]) {
 //    explain_move_semantic();
 //    explain_array_limitations();
 //
-//    test_vector();
-//    test_forward_list();
-//    test_list();
-//    test_stack();
-//    test_queue();
-//
-//    test_heap();
-//    test_binary_tree();
-//    test_huffman_tree();
-//
-//    test_tree();
+    test_vector();
+    test_forward_list();
+    test_list();
+    test_stack();
+    test_queue();
+
+    test_heap();
+    test_binary_tree();
+    test_huffman_tree();
+
+    test_tree();
     test_calculator();
-//
-//    test_graph();
-//    test_graph_traversal();
-//    test_shortest_path();
-//    test_min_spanning_tree();
-//    test_critical_path();
-//
-//    test_static_data_structure_search();
+
+    test_graph();
+    test_graph_traversal();
+    test_shortest_path();
+    test_min_spanning_tree();
+    test_critical_path();
+
+    test_static_data_structure_search();
     return 0;
 }

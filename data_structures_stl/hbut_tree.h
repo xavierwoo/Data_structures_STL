@@ -1,23 +1,23 @@
 //
-//  ds_tree.h
+//  hbut_tree.h
 //  data_structures_stl
 //
 //  Created by 吴 歆韵 on 2024/5/14.
 //
 
-#ifndef ds_tree_h
-#define ds_tree_h
+#ifndef hbut_tree_h
+#define hbut_tree_h
 
 #include <vector>
 #include <stack>
 #include <queue>
 #include <iostream>
 
-#include "ds_vector.h"
-#include "ds_queue.h"
-#include "ds_stack.h"
+#include "hbut_vector.h"
+#include "hbut_queue.h"
+#include "hbut_stack.h"
 
-namespace ds {
+namespace hbut {
 template <typename T>
 struct Tree{
     struct Node;
@@ -37,7 +37,7 @@ public:
 };
 }
 
-namespace ds {
+namespace hbut {
 template <typename T>
 struct Tree<T>::Node{
     
@@ -55,7 +55,7 @@ struct Tree<T>::Node{
 
 //****************Tree<T>成员函数实现*******************/
 template <typename T>
-void ds::Tree<T>::dfs_pre_order_recur(
+void hbut::Tree<T>::dfs_pre_order_recur(
     const Node& node
 ){
     std::cout<<node.data<<' ';
@@ -65,14 +65,14 @@ void ds::Tree<T>::dfs_pre_order_recur(
 }
 
 template <typename T>
-void ds::Tree<T>::DFS_pre_order_print_recursive(
+void hbut::Tree<T>::DFS_pre_order_print_recursive(
 )const{
     if(_root == nullptr) return;
     dfs_pre_order_recur(*_root);
 }
 
 template <typename T>
-void ds::Tree<T>::DFS_pre_order_print_iterative() const {
+void hbut::Tree<T>::DFS_pre_order_print_iterative() const {
     if(_root == nullptr) return;
     std::stack<const Node* const> S;
     S.push(_root);
@@ -90,7 +90,7 @@ void ds::Tree<T>::DFS_pre_order_print_iterative() const {
 }
 
 template <typename T>
-void ds::Tree<T>::dfs_post_order_recur(
+void hbut::Tree<T>::dfs_post_order_recur(
     const Node& node
 ){
     for(const auto& c : node.children){
@@ -100,14 +100,14 @@ void ds::Tree<T>::dfs_post_order_recur(
 }
 
 template <typename T>
-void ds::Tree<T>::DFS_post_order_print_recursive(
+void hbut::Tree<T>::DFS_post_order_print_recursive(
 ) const {
     if(_root == nullptr)return;
     dfs_post_order_recur(*_root);
 }
 
 template <typename T>
-void ds::Tree<T>::BFS_print() const {
+void hbut::Tree<T>::BFS_print() const {
     if(_root == nullptr) return;
     std::queue<const Node* const> Q;
     Q.push(_root);

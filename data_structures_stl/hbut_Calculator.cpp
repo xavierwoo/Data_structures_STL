@@ -5,7 +5,7 @@
 //  Created by 吴 歆韵 on 2024/5/15.
 //
 
-#include "ds_Calculator.hpp"
+#include "hbut_Calculator.hpp"
 #include <regex>
 #include <sstream>
 #include <iostream>
@@ -14,7 +14,7 @@
 
 using std::cout;
 
-ds::Calculator::Calculator(
+hbut::Calculator::Calculator(
     const string& source_code
 ){
     parse(source_code);
@@ -25,7 +25,7 @@ ds::Calculator::Calculator(
     //INFINITY 在<cmath>头文件中定义
 }
 
-void ds::Calculator::parse(
+void hbut::Calculator::parse(
     const string& source_code
 ){
     tokenize(source_code);
@@ -36,7 +36,7 @@ void ds::Calculator::parse(
     }
 }
 
-void ds::Calculator::tokenize(
+void hbut::Calculator::tokenize(
     const string& expression
 ){
     string spaces_added_expression
@@ -48,7 +48,7 @@ void ds::Calculator::tokenize(
     while (iss >> token) _token_queue.push(token);
 }
 
-auto ds::Calculator::analyze() -> Expression {
+auto hbut::Calculator::analyze() -> Expression {
     auto token {_token_queue.front()};
     _token_queue.pop();
     
@@ -60,7 +60,7 @@ auto ds::Calculator::analyze() -> Expression {
     }
 }
 
-auto ds::Calculator::analyze_para() -> Parameter_list{
+auto hbut::Calculator::analyze_para() -> Parameter_list{
     Parameter_list parameters;
     while(!_token_queue.empty() && _token_queue.front() != ")"){
         if(!parameters.empty()){
@@ -82,7 +82,7 @@ auto ds::Calculator::analyze_para() -> Parameter_list{
     return parameters;
 }
 
-auto ds::Calculator::evaluate(const Expression& expr) -> double{
+auto hbut::Calculator::evaluate(const Expression& expr) -> double{
     const string& identifier {expr.data};
     const Parameter_list& parameters {expr.children};
     
@@ -105,7 +105,7 @@ auto ds::Calculator::evaluate(const Expression& expr) -> double{
     }
 }
 
-auto ds::Calculator::calculate_add(
+auto hbut::Calculator::calculate_add(
     const Parameter_list& parameters
 )-> double{
     double result{0.0};
@@ -115,7 +115,7 @@ auto ds::Calculator::calculate_add(
     return result;
 }
 
-auto ds::Calculator::calculate_sub(
+auto hbut::Calculator::calculate_sub(
     const Parameter_list& parameters
 ) -> double {
     if (parameters.empty()){
@@ -137,7 +137,7 @@ auto ds::Calculator::calculate_sub(
     return result;
 }
 
-auto ds::Calculator::calculate_mul(
+auto hbut::Calculator::calculate_mul(
     const Parameter_list& parameters
 ) -> double {
     double result{1.0};
@@ -147,7 +147,7 @@ auto ds::Calculator::calculate_mul(
     return result;
 }
 
-auto ds::Calculator::calculate_div(
+auto hbut::Calculator::calculate_div(
     const Parameter_list& parameters
 ) -> double {
     if(parameters.size() != 2){
