@@ -112,18 +112,16 @@ auto hbut::list<T>::end() -> iterator{
 template <typename T>
 auto hbut::list<T>::insert(
     const iterator pos,
-    const T& value)
--> iterator {
+    const T& value
+) -> iterator {
     
     auto new_node {new Node(value)};
     auto prev {pos._curr->prev};
     
     new_node->prev = prev;
     new_node->next = pos._curr;
-    
     prev->next = new_node;
     pos._curr->prev = new_node;
-    
     ++_size;
     
     return iterator(new_node);

@@ -41,7 +41,6 @@ namespace hbut {
 template <typename T>
 struct Tree<T>::Node{
     
-    //可以使用ds::vector
     using Child_list = std::vector<Node>;
     
     T data;

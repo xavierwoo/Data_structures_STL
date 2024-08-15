@@ -134,6 +134,7 @@ template <typename T>
 void hbut::Binary_tree<T>::level_traversal_print() const {
     if(_root == nullptr)return;
     std::queue<const Node* const> Q;
+    //queue<const Node* const> Q; //应该也可以使用hbut::queue
     Q.push(_root);
     while(!Q.empty()){
         auto curr {Q.front()}; Q.pop();
@@ -165,6 +166,7 @@ void hbut::Binary_tree<T>::pre_order_traversal_print_iterative(
 )const{
     if(_root == nullptr) return;
     std::stack<const Node* const> S;
+//    stack<const Node*> S;
     S.push(_root);
     while(!S.empty()){
         auto curr {S.top()}; S.pop();

@@ -53,7 +53,7 @@ public:
     auto operator[](const unsigned int index) const -> const T& {return _data[index];}
 };
 
-}//namespace ds
+}//namespace hbut
 
 namespace hbut {
 
@@ -85,7 +85,8 @@ public:
 template <typename T>
 hbut::vector<T>::~vector(){
     for(int i{0}; i<_size; i++){
-        _data[i].~T(); //对当前容器中每一个元素调用析构函数
+        //对当前容器中每一个元素调用析构函数
+        _data[i].~T();//需要头文件<cstdlib>
     }
     std::free(_data);
 }
@@ -94,6 +95,7 @@ template <typename T>
 void hbut::vector<T>::reserve(const unsigned int new_cap){
     assert(new_cap > _capacity && "新容量必须大于原容量");
     _data = (T*)std::realloc(_data, sizeof(T) * new_cap);
+    //注意std::realloc函数需要头文件<cstdlib>
     _capacity = new_cap;
 }
 
@@ -217,7 +219,6 @@ template <typename T>
 auto hbut::vector<T>::erase(
     const iterator pos
 ) -> iterator{
-    
     if (pos == end()){
         return pos;
     }
@@ -226,7 +227,6 @@ auto hbut::vector<T>::erase(
     auto next {pos + 1};
     
     (*curr).~T();//删除当前元素
-    
     while(next != end()){
         *curr = std::move(*next); //*curr = *next?
         ++curr;
@@ -253,9 +253,9 @@ auto hbut::vector<T>::insert(
         --curr;
         --prev;
     }
-    
     ++_size;
     new (curr._ptr) T(value);
+
     return pos;
 }
 
@@ -269,19 +269,22 @@ void hbut::vector<T>::clear(){
 
 //********** ds::vector::iterator 成员函数实现*********************
 template <typename T>
-auto hbut::vector<T>::iterator::operator++() -> iterator&{
+auto hbut::vector<T>::iterator::operator++(
+) -> iterator& {
     _ptr++;
     return *this;
 }
 
 template <typename T>
-auto hbut::vector<T>::iterator::operator--() -> iterator& {
+auto hbut::vector<T>::iterator::operator--(
+) -> iterator& {
     _ptr--;
     return *this;
 }
 
 template <typename T>
-auto hbut::vector<T>::iterator::operator*() -> T& {
+auto hbut::vector<T>::iterator::operator*(
+) -> T& {
     return *_ptr;
 }
 

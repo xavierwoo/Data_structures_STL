@@ -6,11 +6,11 @@ set(CMAKE_CXX_STANDARD 20)
 include_directories(data_structures_stl)
 
 add_executable(data_structures_stl
-        data_structures_stl/hbut_algorithms.h
+        data_structures_stl/hbut_algorithms.hpp
         data_structures_stl/hbut_b_tree.h
         data_structures_stl/hbut_binary_tree.h
-        data_structures_stl/hbut_Calculator.cpp
-        data_structures_stl/hbut_Calculator.hpp
+        data_structures_stl/hbut_calculator.cpp
+        data_structures_stl/hbut_calculator.hpp
         data_structures_stl/hbut_forward_list.h
         data_structures_stl/hbut_graph.h
         data_structures_stl/hbut_heap.h
@@ -23,4 +23,5 @@ add_executable(data_structures_stl
         data_structures_stl/preliminaries.cpp
         data_structures_stl/preliminaries.hpp
         data_structures_stl/test.cpp
-        data_structures_stl/test.hpp)
+        data_structures_stl/test.hpp
+        data_structures_stl/hbut_algorithms.cpp)

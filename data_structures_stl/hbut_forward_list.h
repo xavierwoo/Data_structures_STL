@@ -34,7 +34,7 @@ public:
     void reverse();
 };
 
-}//namespace ds
+}//namespace hbut
 
 namespace hbut {
 

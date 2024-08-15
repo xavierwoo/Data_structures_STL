@@ -9,36 +9,30 @@
 #include "preliminaries.hpp"
 #include "test.hpp"
 
-int main(int argc, const char * argv[]) {
-    
-    
-    
+auto main() ->int {
+
     std::cout << "*****数据结构课程演示代码*****\n";
     
-//    explain_initial_assignment();
-//    explain_operator_overloading();
-//    explain_move_semantic();
-//    explain_array_limitations();
-//
-    test_vector();
-    test_forward_list();
-    test_list();
-    test_stack();
-    test_queue();
+    test_std_vector();
+    test_hbut_vector();
 
-    test_heap();
+    test_std_forward_list();
+    test_hbut_forward_list();
+
+    test_std_list();
+    test_hbut_list();
+
+    test_std_stack();
+    test_hbut_stack();
+
+    test_std_queue();
+    test_hbut_queue();
+
+    test_std_heap();
+    test_hbut_heap();
+
     test_binary_tree();
-    test_huffman_tree();
 
     test_tree();
-    test_calculator();
-
-    test_graph();
-    test_graph_traversal();
-    test_shortest_path();
-    test_min_spanning_tree();
-    test_critical_path();
-
-    test_static_data_structure_search();
     return 0;
 }

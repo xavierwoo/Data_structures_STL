@@ -8,9 +8,12 @@
 #ifndef hbut_algorithms_h
 #define hbut_algorithms_h
 
-#include<vector>
+#include <iostream>
+#include <vector>
+#include <string>
 
 namespace hbut {
+auto check_brackets_matching(const std::string&) -> bool;
 
 template <typename Iterator, typename T>
 auto find(const Iterator, const Iterator, const T&) -> Iterator;
@@ -31,7 +34,7 @@ void power_set_recur(
     std::vector<std::vector<T>>&
 );
 
-void hanoi(const int , const char , const char , const char );
+void hanoi(const int, const char, const char, const char);
 }
 
 template <typename Iterator, typename T>
@@ -96,15 +99,6 @@ auto hbut::get_power_set(
     return power_set;
 }
 
-void hanoi(
-        const int n,
-        const char curr,//当前柱
-        const char aux, //辅助柱
-        const char tar  //目标柱
-){
-    if ( n <= 0 )return;
-    hanoi(n-1, curr, tar, aux);
-    std::cout<<"将"<<n<<"号盘从"<<curr<<"移动到"<<tar<<"\n";
-    hanoi(n-1, aux, curr, tar);
-}
+
+
 #endif /* ds_algorithms_h */
