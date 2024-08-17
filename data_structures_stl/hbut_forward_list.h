@@ -161,7 +161,7 @@ template <typename T>
 auto hbut::forward_list<T>::iterator::operator*(
 ) -> T&{
 
-    assert(_curr->data != std::nullopt
+    assert(_curr->data.has_value()
             && "当前节点没有值！");
     return _curr->data.value();
 }

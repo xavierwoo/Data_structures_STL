@@ -158,7 +158,7 @@ auto hbut::list<T>::iterator::operator--() -> iterator& {
 
 template <typename T>
 auto hbut::list<T>::iterator::operator*() -> T&{
-    assert(_curr->data != std::nullopt && "当前迭代器没有值！");
+    assert(_curr->data.has_value() && "当前迭代器没有值！");
     return _curr->data.value();
 }
 
