@@ -340,4 +340,4 @@ auto hbut::Binary_tree<T>::make_huffman_tree(
     }
     return Binary_tree<T>(priority_Q.top());
 }
-#endif /* ds_binary_tree_h */
+#endif /* hbut_binary_tree_h */

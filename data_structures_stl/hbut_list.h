@@ -68,7 +68,7 @@ public:
 
 }
 
-//********** ds::list 成员函数实现********************
+//********** hbut::list 成员函数实现********************
 template <typename T>
 hbut::list<T>::list():_size(0){
     _head = new Node();
@@ -140,7 +140,7 @@ auto hbut::list<T>::erase(
     return ret_it;
 }
 
-//********** ds::list<T>::iterator 成员函数实现********************
+//********** hbut::list<T>::iterator 成员函数实现********************
 
 template <typename T>
 auto hbut::list<T>::iterator::operator++() -> iterator& {

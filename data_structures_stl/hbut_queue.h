@@ -47,4 +47,4 @@ void hbut::queue<T>::pop(){
     _data.erase(_data.begin());
 }
 
-#endif /* ds_queue_h */
+#endif /* hbut_queue_h */

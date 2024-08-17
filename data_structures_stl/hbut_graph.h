@@ -428,7 +428,7 @@ auto hbut::Graph<T>::shortest_path(
     }
     
     if(!v_path.empty()){
-        std::reverse(v_path.begin(), v_path.end()); //TODO: 不支持ds::vector
+        std::reverse(v_path.begin(), v_path.end()); //TODO: 不支持hbut::vector
     }
     
     return std::make_pair(v_path, D[*opt_end_id]);

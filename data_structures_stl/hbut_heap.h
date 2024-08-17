@@ -50,7 +50,7 @@ void heap_percolate_down(
         const Iterator, const Iterator,Iterator, const Comparator
 );
 
-}//namespace ds
+}//namespace hbut
 
 template <typename Iterator, typename Comparator>
 void hbut::push_heap(
@@ -133,4 +133,4 @@ void hbut::make_heap(
     }
 }
 
-#endif /* ds_heap_h */
+#endif /* hbut_heap_h */

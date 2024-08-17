@@ -30,4 +30,4 @@ struct B_tree<T>::Node{
 };
 }
 
-#endif /* ds_b_tree_h */
+#endif /* hbut_b_tree_h */

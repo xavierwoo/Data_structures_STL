@@ -45,4 +45,4 @@ void hbut::stack<T>::pop(){
     _data.erase(_data.end()-1);
 }
 
-#endif /* ds_stack_h */
+#endif /* hbut_stack_h */

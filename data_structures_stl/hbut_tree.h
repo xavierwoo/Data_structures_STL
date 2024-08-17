@@ -121,4 +121,4 @@ void hbut::Tree<T>::BFS_print() const {
     }
 }
 
-#endif /* ds_tree_h */
+#endif /* hbut_tree_h */

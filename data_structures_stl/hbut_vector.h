@@ -40,7 +40,7 @@ public:
     auto insert(const iterator, const T& ) -> iterator;
     
     
-    // 如需在后续课程中使用ds::vector，需要实现以下成员函数
+    // 如需在后续课程中使用hbut::vector，需要实现以下成员函数
     vector(const vector<T>&);
     vector(vector<T>&&); //移动构造函数，会“吃掉”参数vector，节省拷贝成本
     vector(const unsigned int);
@@ -72,16 +72,16 @@ public:
     auto operator+(const unsigned int ) const -> iterator;
     auto operator-(const unsigned int ) const -> iterator;
     
-    // 如需在后续课程中使用ds::vector，需要实现以下成员函数
+    // 如需在后续课程中使用hbut::vector，需要实现以下成员函数
     using value_type = T;
     auto operator-(const iterator ) const -> unsigned int;
     auto operator->() -> T*{return _ptr;};
     auto operator>(const iterator) const -> bool;
 };
 
-}//namespace ds
+}//namespace hbut
 
-//********** ds::vector 成员函数实现********************
+//********** hbut::vector 成员函数实现********************
 template <typename T>
 hbut::vector<T>::~vector(){
     for(int i{0}; i<_size; i++){
@@ -267,7 +267,7 @@ void hbut::vector<T>::clear(){
     _size = 0;
 }
 
-//********** ds::vector::iterator 成员函数实现*********************
+//********** hbut::vector::iterator 成员函数实现*********************
 template <typename T>
 auto hbut::vector<T>::iterator::operator++(
 ) -> iterator& {
@@ -330,4 +330,4 @@ auto hbut::vector<T>::iterator::operator>(
 ) const -> bool{
     return _ptr > other._ptr;
 }
-#endif /* ds_vector_h */
+#endif /* hbut_vector_h */

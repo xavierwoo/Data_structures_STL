@@ -47,7 +47,7 @@ struct forward_list<T>::Node{
     Node(const T& value):data(value){}
 };
 
-}//namespace ds
+}//namespace hbut
 
 namespace hbut {
 
@@ -64,9 +64,9 @@ public:
     auto operator!=(const iterator) -> bool;
 };
 
-}//namespace ds
+}//namespace hbut
 
-//********** ds::forward_list 成员函数实现********************
+//********** hbut::forward_list 成员函数实现********************
 template <typename T>
 hbut::forward_list<T>::forward_list(){
     _head = new Node();
@@ -146,7 +146,7 @@ void hbut::forward_list<T>::reverse(){
     delete new_head;
 }
 
-//********** ds::forward_list::iterator 成员函数实现********************
+//********** hbut::forward_list::iterator 成员函数实现********************
 template <typename T>
 auto hbut::forward_list<T>::iterator::operator++(
 ) -> iterator&{
@@ -175,4 +175,4 @@ auto hbut::forward_list<T>::iterator::operator!=(
 }
 
 
-#endif /* ds_forward_list_h */
+#endif /* hbut_forward_list_h */

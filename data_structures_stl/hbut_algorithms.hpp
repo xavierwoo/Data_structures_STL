@@ -101,4 +101,4 @@ auto hbut::get_power_set(
 
 
 
-#endif /* ds_algorithms_h */
+#endif /* hbut_algorithms_h */
