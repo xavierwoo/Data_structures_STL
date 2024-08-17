@@ -205,7 +205,7 @@ auto hbut::vector<T>::size() const -> unsigned int{
 }
 
 template <typename T>
-//typename ds::vector<T>::iterator ds::vector<T>::begin() const{
+//typename hbut::vector<T>::iterator hbut::vector<T>::begin() const{
 auto hbut::vector<T>::begin() const -> iterator{
     return iterator(_data);
 }
