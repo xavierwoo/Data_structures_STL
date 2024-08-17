@@ -32,5 +32,5 @@ void test_binary_tree();
 
 void test_tree();
 
-
+void test_graph();
 #endif /* test_hpp */

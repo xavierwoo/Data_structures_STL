@@ -1089,7 +1089,8 @@ void test_tree(){
 }
 
 
-auto create_test_graph(){
+auto create_test_graph(
+) -> hbut::Graph<std::string>{
     hbut::Graph<std::string> g;
     g.add_vertex("A");
     g.add_vertex("B");
@@ -1114,25 +1115,64 @@ auto create_test_graph(){
     g.add_edge("E", "D", 4);
     g.add_edge("E", "F", 2);
     g.add_edge("F", "E", 2);
-    
     return g;
 }
 
+void test_graph_add_vertices_edges(){
+    cout<<"测试hbut::graph添加顶点和边\n";
+    auto g {create_test_graph()};
+    cout<<"\t顶点个数："<<g.vertex_num() //6
+        <<"\n\t边个数："<<g.edge_num();  //16
+
+    //测试添加一个已经存在的顶点
+    auto id {g.add_vertex("A")};
+    cout<<"\n\t A的id="<<id<<"\n"; //0
+    //测试为不存在的顶点添加边
+    //g.add_edge("X", "A", 1); //运行终止，提示起点错误
+    //g.add_edge("A", "X", 1); //运行终止，提示终点错误
+    cout<<"\n";
+}
+
+void test_graph_get_edge_weight(){
+    cout<<"测试hbut::graph查询边权\n";
+    auto g {create_test_graph()};
+    cout<<"\t边<D,E>的权值为："
+        << *g.get_edge_weight("D", "E");  //4
+    cout<<"\n";
+}
+
+void test_graph_remove_edge(){
+    cout<<"测试hbut::graph删除边\n";
+    auto g {create_test_graph()};
+    g.remove_edge("B", "E");
+    auto weight {g.get_edge_weight("B", "E")};
+    if (weight.has_value()){
+        cout<<"\t<B,E>边的权值为："<<*weight;
+    }else{
+        cout<<"\t没有<B,E>边";
+    }
+    cout<<"\n";
+}
+
+void test_graph_remove_vertex(){
+    cout<<"测试hbut::graph删除顶点\n";
+    auto g {create_test_graph()};
+    g.remove_vertex("A");
+    auto id {g.get_vertex_id("A")};
+    if(id.has_value()){
+        cout<<"\tA的id为"<<*id;
+    }else{
+        cout<<"\tA不存在";
+    }
+    cout<<"\n";
+}
+
 void test_graph(){
-    cout<<"测试Graph：\n";
-    hbut::Graph<std::string> g{create_test_graph()};
-    
-    cout<<"\t边(A,B)的权值为："<<g.get_edge_weight("A", "B");
-    cout<<"\n\t边(B,C)的权值为："<<g.get_edge_weight("B", "C");
-    g.print();
-    
-    g.remove_edge("A", "B");
-    g.print();
-    
-    g.remove_vertex("B");
-    g.print();
-    
-    cout<<'\n';
+    cout<<"\n\n***图***\n";
+    test_graph_add_vertices_edges();
+    test_graph_get_edge_weight();
+    test_graph_remove_edge();
+    test_graph_remove_vertex();
 }
 
 void test_graph_traversal(){

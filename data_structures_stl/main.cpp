@@ -34,5 +34,7 @@ auto main() ->int {
     test_binary_tree();
 
     test_tree();
+
+    test_graph();
     return 0;
 }

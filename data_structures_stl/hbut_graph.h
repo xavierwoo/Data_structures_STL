@@ -22,45 +22,36 @@ namespace hbut {
 
 template <typename T>
 struct Graph{
-    struct To_edge;
-
-    using Vertex_list = std::vector<std::optional<T>>;
-    using Edge_list = std::vector<To_edge>;
-    using All_edge_list = std::vector<Edge_list>;
-    
 private:
-    Vertex_list _vertices;
-    All_edge_list _all_edge_list;
+    struct To_edge;
+    using Edge_list = std::vector<To_edge>;
+
+    std::vector<std::optional<T>> _vertices;
+    std::vector<Edge_list> _all_edge_list;
     unsigned int _vertex_num{0};
     unsigned int _edge_num{0};
     
-    void add_edge_by_id(const unsigned int,
-                        const unsigned int,
-                        const double);
-    auto get_edge_weight_by_id(const unsigned int,
-                               const unsigned int) const -> double;
-    void remove_edge_by_id(const unsigned int,
-                           const unsigned int);
+    void add_edge_by_id(const unsigned int, const unsigned int, const double);
+    auto get_edge_weight_by_id(const unsigned int, const unsigned int
+            ) const -> std::optional<double>;
+    void remove_edge_by_id(const unsigned int, const unsigned int);
     void remove_vertex_by_id(const unsigned int);
-    auto get_vertex_id(const T&) const -> std::optional<unsigned int>;
-    
+
 public:
-    
-    Graph()=default;
-    
     auto add_vertex(const T&) -> unsigned int;
+    auto get_vertex_id(const T&) const -> std::optional<unsigned int>;
     void add_edge(const T&, const T&, const double);
-    void print() const;
-    auto get_edge_weight(const T&, const T&) const -> double;
+    auto get_edge_weight(const T&, const T&) const -> std::optional<double>;
     auto get_vertex_by_id(const unsigned int) -> std::optional<T>&;
     void remove_edge(const T&, const T&);
     void remove_vertex(const T&);
     auto vertex_num() const {return _vertex_num;}
     auto edge_num() const {return _edge_num;}
     
-    
+    //以下为算法相关代码
     
     using vector_uint = std::vector<unsigned int>;
+    using vector_opt_uint = std::vector<std::optional<unsigned int>>;
     using vector_double = std::vector<double>;
     using vector_T = std::vector<T>;
     using vector_bool = std::vector<bool>;
@@ -78,7 +69,7 @@ public:
         )const-> std::optional<unsigned int>;
     
     auto Dijkstra(const unsigned int
-        ) const -> std::pair<vector_uint, vector_double>;
+        ) const -> std::pair<vector_opt_uint, vector_double>;
     auto shortest_path(const T&, const T&
         ) const -> std::pair<vector_T, double>;
     
@@ -114,8 +105,8 @@ namespace hbut {
 
 template <typename T>
 struct Graph<T>::To_edge{
-    unsigned int to_id;
-    double weight;
+    unsigned int to_id; //到达顶点的编号
+    double weight;      //边权值
 };
 
 }
@@ -159,17 +150,22 @@ auto hbut::Graph<T>::get_vertex_id(
     
     for(auto i{0}; i<_vertices.size(); ++i){
         const auto& opt_v {_vertices[i]};
-        if (opt_v != std::nullopt && *opt_v == v){
-            return std::optional<unsigned int>(i);
+        if (opt_v.has_value() && *opt_v == v){
+            return i;
+            //return std::optional<unsigned int>(i)
         }
     }
     return std::nullopt;
 }
 
+// 将顶点v添加到图中，返回v的id
+// 若v已经在图中，则直接返回原有的id
 template <typename T>
-auto hbut::Graph<T>::add_vertex(const T& v) -> unsigned int{
-    assert(get_vertex_id(v) == std::nullopt && "不能插入重复的顶点");
-    
+auto hbut::Graph<T>::add_vertex(
+        const T& v
+) -> unsigned int{
+    auto check_id {get_vertex_id(v)};
+    if (check_id.has_value()) return *check_id;
     _vertices.push_back(v);
     _all_edge_list.push_back(Edge_list());
     ++_vertex_num;
@@ -178,9 +174,9 @@ auto hbut::Graph<T>::add_vertex(const T& v) -> unsigned int{
 
 template <typename T>
 void hbut::Graph<T>::add_edge_by_id(
-    const unsigned int from_id,
-    const unsigned int to_id,
-    const double edge_weight
+    const unsigned int from_id, //起点编号
+    const unsigned int to_id,   //终点编号
+    const double edge_weight    //边权值
 ){
     const To_edge to_edge{.to_id = to_id,
                         .weight = edge_weight};
@@ -190,60 +186,61 @@ void hbut::Graph<T>::add_edge_by_id(
 
 template <typename T>
 void hbut::Graph<T>::add_edge(
-    const T& from,
-    const T& to,
-    const double weight
+    const T& from,      //起点
+    const T& to,        //终点
+    const double weight //边权值
 ){
     const auto opt_from_id = get_vertex_id(from);
+    assert(opt_from_id.has_value() && "from不存在！");
     const auto opt_to_id = get_vertex_id(to);
-    assert(opt_from_id != std::nullopt && "from不存在！");
-    assert(opt_to_id != std::nullopt && "to不存在！");
+    assert(opt_to_id.has_value() && "to不存在！");
     
     add_edge_by_id(*opt_from_id, *opt_to_id, weight);
 }
 
 template <typename T>
 auto hbut::Graph<T>::get_edge_weight_by_id(
-    const unsigned int from_id,
-    const unsigned int to_id
-)const -> double {
+    const unsigned int from_id, //起点id
+    const unsigned int to_id    //终点id
+)const -> std::optional<double> {
     
     for(const auto& to_edge : _all_edge_list[from_id]){
         if(to_edge.to_id == to_id){
             return to_edge.weight;
         }
     }
-    return INFINITY;
+    return std::nullopt;
 }
 
 template <typename T>
 auto hbut::Graph<T>::get_edge_weight(
-    const T& from, const T& to
-)const -> double{
+    const T& from,  //起点
+    const T& to     //终点
+)const -> std::optional<double>{
     
     const auto opt_from_id = get_vertex_id(from);
+    assert(opt_from_id.has_value() && "from不存在！");
     const auto opt_to_id = get_vertex_id(to);
-    assert(opt_from_id != std::nullopt && "from不存在！");
-    assert(opt_to_id != std::nullopt && "to不存在！");
+    assert(opt_to_id.has_value() && "to不存在！");
     
     return get_edge_weight_by_id(*opt_from_id, *opt_to_id);
 }
 
-template <typename T>
-void hbut::Graph<T>::print() const {
-    std::cout<<"\nGraph:\n";
-    for(auto v_id{0}; v_id<_vertices.size(); ++v_id){
-        if(_vertices[v_id] == std::nullopt) continue;
-        std::cout<<"\t"<<*_vertices[v_id]<<": ";
-        
-        for(auto& to_edge : _all_edge_list[v_id]){
-            std::cout<<'('<<*_vertices[to_edge.to_id]
-            <<','<<to_edge.weight<<"), ";
-        }
-        
-        std::cout<<'\n';
-    }
-}
+//template <typename T>
+//void hbut::Graph<T>::print() const {
+//    std::cout<<"\nGraph:\n";
+//    for(auto v_id{0}; v_id<_vertices.size(); ++v_id){
+//        if(_vertices[v_id] == std::nullopt) continue;
+//        std::cout<<"\t"<<*_vertices[v_id]<<": ";
+//
+//        for(auto& to_edge : _all_edge_list[v_id]){
+//            std::cout<<'('<<*_vertices[to_edge.to_id]
+//            <<','<<to_edge.weight<<"), ";
+//        }
+//
+//        std::cout<<'\n';
+//    }
+//}
 
 template <typename T>
 auto hbut::Graph<T>::get_vertex_by_id(const unsigned int index) -> std::optional<T>&{
@@ -252,8 +249,8 @@ auto hbut::Graph<T>::get_vertex_by_id(const unsigned int index) -> std::optional
 
 template <typename T>
 void hbut::Graph<T>::remove_edge_by_id(
-    const unsigned int from_id,
-    const unsigned int to_id
+    const unsigned int from_id,  //起点id
+    const unsigned int to_id     //终点id
 ){
     auto& edge_list {_all_edge_list[from_id]};
     for(auto iter{edge_list.begin()}; 
@@ -269,18 +266,21 @@ void hbut::Graph<T>::remove_edge_by_id(
 }
 
 template <typename T>
-void hbut::Graph<T>::remove_edge(const T& from, const T& to){
+void hbut::Graph<T>::remove_edge(
+    const T& from, //起点
+    const T& to    //终点
+){
     const auto opt_from_id = get_vertex_id(from);
+    assert(opt_from_id.has_value() && "from不存在！");
     const auto opt_to_id = get_vertex_id(to);
-    assert(opt_from_id != std::nullopt && "from不存在！");
-    assert(opt_to_id != std::nullopt && "to不存在！");
+    assert(opt_to_id.has_value() && "to不存在！");
     
     remove_edge_by_id(*opt_from_id, *opt_to_id);
 }
 
 template <typename T>
 void hbut::Graph<T>::remove_vertex_by_id(
-    const unsigned int v_id
+    const unsigned int v_id //顶点id
 ){
     //删除v_id的出边
     _all_edge_list[v_id].clear();
@@ -306,7 +306,7 @@ void hbut::Graph<T>::remove_vertex_by_id(
 template <typename T>
 void hbut::Graph<T>::remove_vertex(const T& v){
     const auto opt_v_id {get_vertex_id(v)};
-    assert(opt_v_id != std::nullopt && "顶点不存在");
+    assert(opt_v_id.has_value() && "顶点不存在");
     
     remove_vertex_by_id(*opt_v_id);
 }
@@ -314,7 +314,7 @@ void hbut::Graph<T>::remove_vertex(const T& v){
 template <typename T>
 void hbut::Graph<T>::BFS_print(const T& start)const{
     const auto opt_start_id {get_vertex_id(start)};
-    assert(opt_start_id != std::nullopt && "顶点不存在");
+    assert(opt_start_id.has_value() && "顶点不存在");
     const auto start_id {*opt_start_id};
     
     vector_bool visited(_vertices.size(), false);
@@ -336,7 +336,7 @@ void hbut::Graph<T>::BFS_print(const T& start)const{
 template <typename T>
 void hbut::Graph<T>::DFS_print_iterative(const T& start)const{
     const auto opt_start_id {get_vertex_id(start)};
-    assert(opt_start_id != std::nullopt && "顶点不存在");
+    assert(opt_start_id.has_value() && "顶点不存在");
     const auto start_id {*opt_start_id};
     
     vector_bool visited(_vertices.size(), false);
@@ -379,8 +379,8 @@ auto hbut::Graph<T>::find_min_unvisited_v(
 template <typename T>
 auto hbut::Graph<T>::Dijkstra(
     const unsigned int start_id
-) const ->std::pair<vector_uint, vector_double> {
-    vector_uint P(_vertices.size(), UINT_MAX);
+) const ->std::pair<vector_opt_uint, vector_double> {
+    vector_opt_uint P(_vertices.size(), std::nullopt);
     vector_double D(_vertices.size(), INFINITY);
     vector_bool visited(_vertices.size(), false);
     
@@ -410,28 +410,28 @@ auto hbut::Graph<T>::shortest_path(
     const T& start, const T& end
 )const -> std::pair<vector_T, double>{
     const auto opt_start_id {get_vertex_id(start)};
-    assert(opt_start_id != std::nullopt && "顶点不存在");
+    assert(opt_start_id.has_value() && "顶点不存在");
     const auto opt_end_id {get_vertex_id(end)};
-    assert(opt_end_id != std::nullopt && "顶点不存在");
+    assert(opt_end_id.has_value() && "顶点不存在");
     
-    const auto start_id {*opt_start_id};
-    const auto end_id {*opt_end_id};
+//    const auto start_id {*opt_start_id};
+//    const auto end_id {*opt_end_id};
     
-    auto [P, D] {Dijkstra(start_id)};
+    auto [P, D] {Dijkstra(*opt_start_id)};
     
     vector_T v_path;
     
-    auto curr {end_id};
-    while(curr != UINT_MAX){
-        v_path.push_back(*_vertices[curr]);
-        curr = P[curr];
+    auto curr {opt_end_id};
+    while(curr != std::nullopt){
+        v_path.push_back(*_vertices[*curr]);
+        curr = P[*curr];
     }
     
     if(!v_path.empty()){
         std::reverse(v_path.begin(), v_path.end()); //TODO: 不支持ds::vector
     }
     
-    return std::make_pair(v_path, D[end_id]);
+    return std::make_pair(v_path, D[*opt_end_id]);
 }
 
 template <typename T>
@@ -439,7 +439,7 @@ auto hbut::Graph<T>::min_spanning_tree_prim(
     const T& start
 )const -> std::pair<vector_Edge, double>{
     const auto opt_start_id {get_vertex_id(start)};
-    assert(opt_start_id != std::nullopt && "顶点不存在");
+    assert(opt_start_id.has_value() && "顶点不存在");
     const auto start_id {*opt_start_id};
     
     vector_uint P(_vertices.size(), UINT_MAX);
@@ -594,7 +594,7 @@ auto hbut::Graph<T>::topology_sort() const ->std::optional<vector_uint>{
 template <typename T>
 auto hbut::Graph<T>::critical_path_print() const {
     auto opt_topo_sort {topology_sort()};
-    assert(opt_topo_sort != std::nullopt && "拓扑排序失败");
+    assert(opt_topo_sort.has_value() && "拓扑排序失败");
     auto& topo_sort {*opt_topo_sort};
 
     //计算最早发生时间
@@ -605,8 +605,8 @@ auto hbut::Graph<T>::critical_path_print() const {
         for (auto i{0}; i<_vertices.size(); ++i){
             if(_vertices[i] == std::nullopt) continue;
             const auto temp {get_edge_weight_by_id(i, j)};
-            if(temp < INFINITY && (VE[i] + temp) > max){
-                max = VE[i] + temp;
+            if(temp.has_value() && (VE[i] + *temp) > max){
+                max = VE[i] + *temp;
             }
         }
         VE[j] = max;
