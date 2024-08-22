@@ -1263,6 +1263,16 @@ void test_kruskal_algorithm(){
     cout<<"\n";
 }
 
+void test_shortest_path_algorithm(){
+    cout<<"测试hbut::graph 最短路径算法\n\t";
+    auto g {create_test_graph()};
+    auto [path, weight] {g.shortest_path("A", "C")};
+    cout<<"A到C最短路径长："<<weight<<"\n\t";
+    cout<<"路径为：";
+    for(auto& v : path) cout<<v<<" ";
+    cout<<"\n";
+}
+
 void test_graph(){
     cout<<"\n\n***图***\n";
     test_graph_add_vertices_edges();
@@ -1276,6 +1286,7 @@ void test_graph(){
     test_graph_DFS_tree();
     test_prim_algorithm();
     test_kruskal_algorithm();
+    test_shortest_path_algorithm();
 }
 
 

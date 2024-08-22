@@ -468,10 +468,9 @@ auto hbut::Graph<T>::Dijkstra(
             const auto u_id {to_edge.to_id};
             if(visited[u_id]) continue;
             const auto alt_weight {D[v_id] + to_edge.weight};
-            if(alt_weight < D[u_id]){
-                D[u_id] = alt_weight;
-                P[u_id] = v_id;
-            }
+            if(alt_weight >= D[u_id])continue;
+            D[u_id] = alt_weight;
+            P[u_id] = v_id;
         }
     }
     return std::make_pair(P, D);
@@ -524,11 +523,9 @@ auto hbut::Graph<T>::min_spanning_tree_prim(
         visited[v_id] = true;
         for(const auto& to_edge : _all_edge_list[v_id]){
             const auto u_id {to_edge.to_id};
-            if(visited[u_id]) continue;
-            if(to_edge.weight < D[u_id]){
-                D[u_id] = to_edge.weight;
-                P[u_id] = v_id;
-            }
+            if(visited[u_id] || to_edge.weight >= D[u_id]) continue;
+            D[u_id] = to_edge.weight;
+            P[u_id] = v_id;
         }
     }
     return std::make_tuple(visited, P, tree_weight);
