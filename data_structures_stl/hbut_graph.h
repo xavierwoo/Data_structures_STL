@@ -13,7 +13,6 @@
 #include <algorithm>
 #include <cassert>
 #include <limits> // UINT_MAX
-#include <cmath> // INFINITY
 #include <queue>
 #include <stack>
 #include <utility>
@@ -40,36 +39,52 @@ private:
 public:
     auto add_vertex(const T&) -> unsigned int;
     auto get_vertex_id(const T&) const -> std::optional<unsigned int>;
+    auto get_vertex_by_id(const unsigned int) -> std::optional<T>&;
     void add_edge(const T&, const T&, const double);
     auto get_edge_weight(const T&, const T&) const -> std::optional<double>;
-    auto get_vertex_by_id(const unsigned int) -> std::optional<T>&;
     void remove_edge(const T&, const T&);
     void remove_vertex(const T&);
     auto vertex_num() const {return _vertex_num;}
     auto edge_num() const {return _edge_num;}
     
     //以下为算法相关代码
-    
-    using vector_uint = std::vector<unsigned int>;
-    using vector_opt_uint = std::vector<std::optional<unsigned int>>;
-    using vector_double = std::vector<double>;
-    using vector_T = std::vector<T>;
+
+private:
+
+    //遍历算法使用
+    using vector_opt_uint = std::vector<
+                std::optional<unsigned int>
+            >;
     using vector_bool = std::vector<bool>;
     using queue_uint = std::queue<unsigned int>;
     using stack_uint = std::stack<unsigned int>;
-    
+
+    using vector_double = std::vector<double>;
+    const double _INFINITY
+            = std::numeric_limits<double>::infinity();
+
+    using vector_T = std::vector<T>;
+    using vector_uint = std::vector<unsigned int>;
+
+    void dfs_print_recur(const unsigned int, vector_bool&)const;
+    void dfs_tree_recur(const unsigned int, vector_bool&, vector_opt_uint&)const;
+
+    //最短路径
+    auto find_min_unvisited_v(
+            const vector_bool&, const vector_double&
+    )const-> std::optional<unsigned int>;
+
+    auto Dijkstra(const unsigned int
+    ) const -> std::pair<vector_opt_uint, vector_double>;
+public:
     //遍历算法
     void BFS_print(const T&)const;
     void DFS_print_iterative(const T&)const;
     void DFS_print_recursive(const T&)const;
-    
-    //最短路径
-    auto find_min_unvisited_v(
-        const vector_bool&, const vector_double&
-        )const-> std::optional<unsigned int>;
-    
-    auto Dijkstra(const unsigned int
-        ) const -> std::pair<vector_opt_uint, vector_double>;
+
+    auto get_BFS_tree(const T&)const -> vector_opt_uint ;
+    auto get_DFS_tree(const T&)const -> vector_opt_uint ;
+
     auto shortest_path(const T&, const T&
         ) const -> std::pair<vector_T, double>;
     
@@ -77,7 +92,7 @@ public:
     struct Edge_info;
     using vector_Edge = std::vector<Edge_info>;
     auto min_spanning_tree_prim(const T&
-        ) const -> std::pair<vector_Edge, double>;
+        ) const -> std::tuple<vector_bool, vector_opt_uint, double>;
     
     struct Edge_id_info;
     struct Edge_heap_comparator;
@@ -226,24 +241,10 @@ auto hbut::Graph<T>::get_edge_weight(
     return get_edge_weight_by_id(*opt_from_id, *opt_to_id);
 }
 
-//template <typename T>
-//void hbut::Graph<T>::print() const {
-//    std::cout<<"\nGraph:\n";
-//    for(auto v_id{0}; v_id<_vertices.size(); ++v_id){
-//        if(_vertices[v_id] == std::nullopt) continue;
-//        std::cout<<"\t"<<*_vertices[v_id]<<": ";
-//
-//        for(auto& to_edge : _all_edge_list[v_id]){
-//            std::cout<<'('<<*_vertices[to_edge.to_id]
-//            <<','<<to_edge.weight<<"), ";
-//        }
-//
-//        std::cout<<'\n';
-//    }
-//}
-
 template <typename T>
-auto hbut::Graph<T>::get_vertex_by_id(const unsigned int index) -> std::optional<T>&{
+auto hbut::Graph<T>::get_vertex_by_id(
+    const unsigned int index
+) -> std::optional<T>&{
     return _vertices[index];
 }
 
@@ -313,35 +314,59 @@ void hbut::Graph<T>::remove_vertex(const T& v){
 
 template <typename T>
 void hbut::Graph<T>::BFS_print(const T& start)const{
-    const auto opt_start_id {get_vertex_id(start)};
-    assert(opt_start_id.has_value() && "顶点不存在");
-    const auto start_id {*opt_start_id};
-    
+    const auto start_id {get_vertex_id(start)};
+    assert(start_id.has_value() && "顶点不存在");
+
     vector_bool visited(_vertices.size(), false);
     queue_uint Q;
-    Q.push(start_id);
-    
+    Q.push(*start_id);
+    visited[*start_id] = true;
+
     while(!Q.empty()){
         const auto curr {Q.front()}; Q.pop();
-        if(visited[curr]) continue;
         std::cout<<*_vertices[curr]<<' ';
-        visited[curr] = true;
         for(const auto& to_edge : _all_edge_list[curr]){
+            if(visited[to_edge.to_id]) continue;
+            visited[to_edge.to_id] = true;
             Q.push(to_edge.to_id);
-            //思考：是否能在此处判断visited后再入队列
         }
     }
 }
 
 template <typename T>
+auto hbut::Graph<T>::get_BFS_tree(
+    const T& start
+) const -> vector_opt_uint {
+    const auto start_id {get_vertex_id(start)};
+    assert(start_id.has_value() && "顶点不存在");
+
+    auto tree {vector_opt_uint(vertex_num(), std::nullopt)};
+    vector_bool visited(_vertices.size(), false);
+    queue_uint Q;
+    Q.push(*start_id);
+    visited[*start_id] = true;
+
+    while(!Q.empty()){
+        const auto curr {Q.front()}; Q.pop();
+
+        for(const auto& to_edge : _all_edge_list[curr]){
+            if (visited[to_edge.to_id]) continue;
+            visited[to_edge.to_id] = true;
+            tree[to_edge.to_id] = curr;
+            Q.push(to_edge.to_id);
+        }
+    }
+    return tree;
+}
+
+template <typename T>
 void hbut::Graph<T>::DFS_print_iterative(const T& start)const{
-    const auto opt_start_id {get_vertex_id(start)};
-    assert(opt_start_id.has_value() && "顶点不存在");
-    const auto start_id {*opt_start_id};
-    
+    const auto start_id {get_vertex_id(start)};
+    assert(start_id.has_value() && "顶点不存在");
+
     vector_bool visited(_vertices.size(), false);
     stack_uint S;
-    S.push(start_id);
+    S.push(*start_id);
     
     while(!S.empty()){
         const auto curr {S.top()}; S.pop();
@@ -350,9 +375,56 @@ void hbut::Graph<T>::DFS_print_iterative(const T& start)const{
         visited[curr] = true;
         for(const auto& to_edge : _all_edge_list[curr]){
             S.push(to_edge.to_id);
-            //思考：是否能在此处判断visited后再入栈
         }
     }
+}
+
+template <typename T>
+void hbut::Graph<T>::dfs_print_recur(
+    const unsigned int curr, //当前顶点id
+    vector_bool& visited     //已访问标记
+) const {
+    std::cout<<*_vertices[curr]<<" ";
+    visited[curr] = true;
+    for(const auto& to_edge : _all_edge_list[curr]){
+        if(visited[to_edge.to_id]) continue;
+        dfs_print_recur(to_edge.to_id, visited);
+    }
+}
+
+template <typename T>
+void hbut::Graph<T>::DFS_print_recursive(const T& v) const {
+    auto start_id {get_vertex_id(v)};
+    assert(start_id.has_value() && "顶点不存在！");
+    vector_bool visited(vertex_num(), false);
+    dfs_print_recur(*start_id, visited);
+}
+
+template <typename T>
+void hbut::Graph<T>::dfs_tree_recur(
+    const unsigned int curr, //当前顶点id
+    vector_bool& visited,    //已访问标记
+    vector_opt_uint& tree    //父亲表示法的生成树
+) const {
+    visited[curr] = true;
+    for(const auto& to_edge : _all_edge_list[curr]){
+        if(visited[to_edge.to_id]) continue;
+        tree[to_edge.to_id] = curr;
+        dfs_tree_recur(to_edge.to_id, visited, tree);
+    }
+}
+
+template <typename T>
+auto hbut::Graph<T>::get_DFS_tree(
+    const T& v
+) const -> vector_opt_uint {
+    auto start_id {get_vertex_id(v)};
+    assert(start_id.has_value() && "顶点不存在！");
+
+    vector_bool visited(vertex_num(), false);
+    vector_opt_uint tree(vertex_num(), std::nullopt);
+    dfs_tree_recur(*start_id, visited, tree);
+    return tree;
 }
 
 
@@ -362,7 +434,7 @@ auto hbut::Graph<T>::find_min_unvisited_v(
     const vector_double& D
 ) const -> std::optional<unsigned int>{
     unsigned int min_index;
-    double min_weight {INFINITY};
+    double min_weight {_INFINITY};
     
     for(auto i{0}; i<visited.size(); ++i){
         if(!visited[i] && D[i] < min_weight){
@@ -370,9 +442,9 @@ auto hbut::Graph<T>::find_min_unvisited_v(
             min_index = i;
         }
     }
-    return min_weight == INFINITY ?
+    return min_weight == _INFINITY ?
         std::nullopt
-        :
+                                   :
         std::optional<unsigned int>(min_index);
 }
 
@@ -381,7 +453,7 @@ auto hbut::Graph<T>::Dijkstra(
     const unsigned int start_id
 ) const ->std::pair<vector_opt_uint, vector_double> {
     vector_opt_uint P(_vertices.size(), std::nullopt);
-    vector_double D(_vertices.size(), INFINITY);
+    vector_double D(_vertices.size(), _INFINITY);
     vector_bool visited(_vertices.size(), false);
     
     D[start_id] = 0;
@@ -414,9 +486,6 @@ auto hbut::Graph<T>::shortest_path(
     const auto opt_end_id {get_vertex_id(end)};
     assert(opt_end_id.has_value() && "顶点不存在");
     
-//    const auto start_id {*opt_start_id};
-//    const auto end_id {*opt_end_id};
-    
     auto [P, D] {Dijkstra(*opt_start_id)};
     
     vector_T v_path;
@@ -428,7 +497,7 @@ auto hbut::Graph<T>::shortest_path(
     }
     
     if(!v_path.empty()){
-        std::reverse(v_path.begin(), v_path.end()); //TODO: 不支持hbut::vector
+        std::reverse(v_path.begin(), v_path.end());
     }
     
     return std::make_pair(v_path, D[*opt_end_id]);
@@ -437,44 +506,32 @@ auto hbut::Graph<T>::shortest_path(
 template <typename T>
 auto hbut::Graph<T>::min_spanning_tree_prim(
     const T& start
-)const -> std::pair<vector_Edge, double>{
-    const auto opt_start_id {get_vertex_id(start)};
-    assert(opt_start_id.has_value() && "顶点不存在");
-    const auto start_id {*opt_start_id};
-    
-    vector_uint P(_vertices.size(), UINT_MAX);
-    vector_double W(_vertices.size(), INFINITY);
+)const -> std::tuple<vector_bool, vector_opt_uint, double>{
+    const auto start_id {get_vertex_id(start)};
+    assert(start_id.has_value() && "顶点不存在");
+
+    vector_opt_uint P(_vertices.size(), std::nullopt);
+    vector_double D(_vertices.size(), _INFINITY);
     vector_bool visited(_vertices.size(), false);
-    vector_Edge tree_edges;
     double tree_weight{0};
-    W[start_id] = 0;
+    D[*start_id] = 0;
     
     while(true){
-        const auto opt_v_id {find_min_unvisited_v(visited, W)};
+        const auto opt_v_id {find_min_unvisited_v(visited, D)};
         if (opt_v_id == std::nullopt) break;
         const auto v_id {*opt_v_id};
-        
-        //记录找到的最小边
-        if(P[v_id] != UINT_MAX){
-            tree_edges.push_back(Edge_info{
-                .from_vertex = *_vertices[P[v_id]],
-                .to_vertex = *_vertices[v_id],
-                .weight = W[v_id]
-            });
-            tree_weight += W[v_id];
-        }
-        
+        tree_weight += D[v_id];
         visited[v_id] = true;
         for(const auto& to_edge : _all_edge_list[v_id]){
             const auto u_id {to_edge.to_id};
             if(visited[u_id]) continue;
-            if(to_edge.weight < W[u_id]){
-                W[u_id] = to_edge.weight;
+            if(to_edge.weight < D[u_id]){
+                D[u_id] = to_edge.weight;
                 P[u_id] = v_id;
             }
         }
     }
-    return std::make_pair(tree_edges, tree_weight);
+    return std::make_tuple(visited, P, tree_weight);
 }
 
 template <typename T>
@@ -613,11 +670,11 @@ auto hbut::Graph<T>::critical_path_print() const {
     }
     
     //计算最迟发生时间
-    vector_double VL(_vertices.size(), INFINITY);
+    vector_double VL(_vertices.size(), _INFINITY);
     VL[*(topo_sort.end() - 1)] = VE[*(topo_sort.end() - 1)];
     for(int k = (int)topo_sort.size() - 2; k >= 0; --k){
         auto i {topo_sort[k]};
-        double min {INFINITY};
+        double min {_INFINITY};
         for(const auto& to_edge : _all_edge_list[i]){
             auto j {to_edge.to_id};
             if(VL[j] - to_edge.weight < min){

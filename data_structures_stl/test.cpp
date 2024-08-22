@@ -1122,7 +1122,8 @@ void test_graph_add_vertices_edges(){
     cout<<"测试hbut::graph添加顶点和边\n";
     auto g {create_test_graph()};
     cout<<"\t顶点个数："<<g.vertex_num() //6
-        <<"\n\t边个数："<<g.edge_num();  //16
+        <<"\n\t边个数："<<g.edge_num()   //16
+        <<"\n\t编号3的顶点为"<<*g.get_vertex_by_id(3); //D
 
     //测试添加一个已经存在的顶点
     auto id {g.add_vertex("A")};
@@ -1167,28 +1168,117 @@ void test_graph_remove_vertex(){
     cout<<"\n";
 }
 
+void test_graph_BFS(){
+    cout<<"测试hbut::graph广度优先\n\t";
+    auto g {create_test_graph()};
+    g.BFS_print("A");
+    cout<<"\n";
+}
+
+void test_graph_DFS_recursive(){
+    cout<<"测试hbut::graph递归深度优先\n\t";
+    auto g {create_test_graph()};
+    g.DFS_print_recursive("A");
+    cout<<"\n";
+}
+
+void test_graph_DFS_iterative(){
+    cout<<"测试hbut::graph迭代深度优先\n\t";
+    auto g {create_test_graph()};
+    g.DFS_print_iterative("A");
+    cout<<"\n";
+}
+
+void test_graph_BFS_tree(){
+    cout<<"测试hbut::graph广度优先树\n\t";
+    auto g {create_test_graph()};
+    auto bfs_tree {g.get_BFS_tree("A")};
+
+    cout<<"父亲表示树：\n\t\t顶点：";
+    for(int i{0}; i<g.vertex_num(); ++i) cout<<*g.get_vertex_by_id(i)<<" ";
+    cout<<"\n\t\t父亲：";
+    for(int i{0}; i<g.vertex_num(); ++i){
+        auto id {bfs_tree[i]};
+        if (id.has_value()){
+            cout<<*g.get_vertex_by_id(*id)<<" ";
+        } else {
+            cout<<"_ ";
+        }
+    }
+    cout<<"\n";
+}
+
+void test_graph_DFS_tree(){
+    cout<<"测试hbut::graph深度优先树\n\t";
+    auto g {create_test_graph()};
+    auto bfs_tree {g.get_DFS_tree("A")};
+
+    cout<<"父亲表示树：\n\t\t顶点：";
+    for(int i{0}; i<g.vertex_num(); ++i) cout<<*g.get_vertex_by_id(i)<<" ";
+    cout<<"\n\t\t父亲：";
+    for(int i{0}; i<g.vertex_num(); ++i){
+        auto id {bfs_tree[i]};
+        if (id.has_value()){
+            cout<<*g.get_vertex_by_id(*id)<<" ";
+        } else {
+            cout<<"_ ";
+        }
+    }
+    cout<<"\n";
+}
+
+void test_prim_algorithm(){
+    cout<<"测试hbut::graph Prim算法\n\t";
+    auto g {create_test_graph()};
+    auto [visited, spanning_tree, tree_weight]{g.min_spanning_tree_prim("A")};
+
+    cout<<"最小生成树权值："<<tree_weight<<"\n\t";
+    cout<<"父亲表示树：\n\t\t顶点：";
+    for(int i{0}; i<g.vertex_num(); ++i) cout<<*g.get_vertex_by_id(i)<<" ";
+    cout<<"\n\t\t父亲：";
+    for(int i{0}; i<g.vertex_num(); ++i){
+        auto id {spanning_tree[i]};
+        if (id.has_value()){
+            cout<<*g.get_vertex_by_id(*id)<<" ";
+        } else {
+            cout<<"_ ";
+        }
+    }
+    cout<<"\n\t\t访问：";
+    for(int i{0}; i<g.vertex_num(); ++i) cout<<visited[i]<<" ";
+    cout<<"\n";
+}
+
+
+void test_kruskal_algorithm(){
+    cout<<"测试hbut::graph Kruskal算法\n\t";
+    auto g {create_test_graph()};
+    auto [edges, tree_weight] {g.min_spanning_tree_kruskal()};
+
+    cout<<"最小生成树权值："<<tree_weight<<"\n\t";
+    cout<<"生成树的边：\n";
+    for(auto& edge: edges){
+        cout<<"\t<"<<edge.from_vertex<<","<<edge.to_vertex<<","<<edge.weight<<">\n";
+    }
+    cout<<"\n";
+}
+
 void test_graph(){
     cout<<"\n\n***图***\n";
     test_graph_add_vertices_edges();
     test_graph_get_edge_weight();
     test_graph_remove_edge();
     test_graph_remove_vertex();
+    test_graph_BFS();
+    test_graph_DFS_recursive();
+    test_graph_DFS_iterative();
+    test_graph_BFS_tree();
+    test_graph_DFS_tree();
+    test_prim_algorithm();
+    test_kruskal_algorithm();
 }
 
-void test_graph_traversal(){
-    cout<<"测试Graph遍历算法：\n";
-    hbut::Graph<std::string> g{create_test_graph()};
-    
-    cout<<"\n\t广度优先遍历：";
-    g.BFS_print("A");
-    
-    cout<<'\n';
-    
-    cout<<"\n\t深度优先遍历：";
-    g.DFS_print_iterative("A");
-    
-    cout<<'\n';
-}
+
 
 void test_shortest_path(){
     cout<<"测试Graph最短路径：\n";
@@ -1200,22 +1290,6 @@ void test_shortest_path(){
     cout<<"\n\t路径长度为："<<weight<<"\n";
 }
 
-void test_min_spanning_tree(){
-    cout<<"测试最小生成树：\n";
-    auto g{create_test_graph()};
-    
-    cout<<"\tPrim算法结果：";
-    auto [tree_edges_p, tree_weight_p] {g.min_spanning_tree_prim("B")};
-    for(auto& e: tree_edges_p) cout<<'('<<e.from_vertex<<','<<e.to_vertex<<','<<e.weight<<") ";
-    cout<<"\n\t树权值："<<tree_weight_p;
-    
-    cout<<"\n\tKruskal算法结果：";
-    auto [tree_edges_k, tree_weight_k] {g.min_spanning_tree_kruskal()};
-    for(auto& e: tree_edges_k) cout<<'('<<e.from_vertex<<','<<e.to_vertex<<','<<e.weight<<") ";
-    cout<<"\n\t树权值："<<tree_weight_k;
-    
-    cout<<'\n';
-}
 
 auto create_test_AOE_graph() -> hbut::Graph<std::string>{
     hbut::Graph<std::string> g;

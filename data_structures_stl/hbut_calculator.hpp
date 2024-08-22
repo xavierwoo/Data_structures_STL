@@ -12,6 +12,7 @@
 #include "hbut_queue.h"
 #include <string>
 #include <queue>
+#include <limits>
 
 namespace hbut {
 struct Calculator{
@@ -24,6 +25,8 @@ private:
     std::queue<string> _token_queue; //词符队列
     bool _is_grammar_correct {true};
     double _result; //计算结果
+    const double _INFINITY //无穷大
+            = std::numeric_limits<double>::infinity();
     
     void parse(const string&);
     void tokenize(const string&);

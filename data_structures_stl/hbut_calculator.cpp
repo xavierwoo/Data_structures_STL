@@ -19,10 +19,9 @@ hbut::Calculator::Calculator(
 ){
     parse(source_code);
     _result = _is_grammar_correct ?
-            evaluate(_grammar_tree)
-            : 
-            INFINITY;
-    //INFINITY 在<cmath>头文件中定义
+              evaluate(_grammar_tree)
+            :
+              _INFINITY;
 }
 
 void hbut::Calculator::parse(
@@ -95,13 +94,13 @@ auto hbut::Calculator::evaluate(const Expression& expr) -> double{
         if(!parameters.empty()){
             cout <<"常数不可作为函数："<<identifier<<" ！\n";
             _is_grammar_correct = false;
-            return INFINITY;
+            return _INFINITY;
         }
         return (double) std::stoi(identifier);
     } else {
         cout<<"未知函数："<<identifier<<"！\n";
         _is_grammar_correct = false;
-        return INFINITY;
+        return _INFINITY;
     }
 }
 
@@ -122,7 +121,7 @@ auto hbut::Calculator::calculate_sub(
         _is_grammar_correct = false;
         cout<<"sub函数至少需要一个参数！\n";
         _is_grammar_correct = false;
-        return INFINITY;
+        return _INFINITY;
     }
     if(parameters.size() == 1){
         return 0 - evaluate(parameters[0]);
@@ -153,7 +152,7 @@ auto hbut::Calculator::calculate_div(
     if(parameters.size() != 2){
         cout<<"div函数只接受两个参数！\n";
         _is_grammar_correct = false;
-        return INFINITY;
+        return _INFINITY;
     }
     return evaluate(parameters[0]) 
         / evaluate(parameters[1]);
