@@ -33,4 +33,10 @@ void test_binary_tree();
 void test_tree();
 
 void test_graph();
+
+void test_search_methods();
+
+void linear_data_structure_experiment();
+
+
 #endif /* test_hpp */

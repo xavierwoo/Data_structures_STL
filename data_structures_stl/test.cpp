@@ -24,8 +24,9 @@
 #include <stack>
 #include <queue>
 #include <algorithm>
-#include <functional>
 #include <string>
+#include <fstream>
+#include <ctime>
 
 using std::cout;
 
@@ -1273,38 +1274,9 @@ void test_shortest_path_algorithm(){
     cout<<"\n";
 }
 
-void test_graph(){
-    cout<<"\n\n***图***\n";
-    test_graph_add_vertices_edges();
-    test_graph_get_edge_weight();
-    test_graph_remove_edge();
-    test_graph_remove_vertex();
-    test_graph_BFS();
-    test_graph_DFS_recursive();
-    test_graph_DFS_iterative();
-    test_graph_BFS_tree();
-    test_graph_DFS_tree();
-    test_prim_algorithm();
-    test_kruskal_algorithm();
-    test_shortest_path_algorithm();
-}
-
-
-
-void test_shortest_path(){
-    cout<<"测试Graph最短路径：\n";
-    hbut::Graph<std::string> g{create_test_graph()};
-    
-    auto [path, weight] {g.shortest_path("A", "C")};
-    cout<<"\tA到C的最短路径为：";
-    for(auto& v: path) cout<<v<<" ";
-    cout<<"\n\t路径长度为："<<weight<<"\n";
-}
-
-
 auto create_test_AOE_graph() -> hbut::Graph<std::string>{
     hbut::Graph<std::string> g;
-    
+
     g.add_vertex("A");
     g.add_vertex("B");
     g.add_vertex("C");
@@ -1314,7 +1286,7 @@ auto create_test_AOE_graph() -> hbut::Graph<std::string>{
     g.add_vertex("G");
     g.add_vertex("H");
     g.add_vertex("I");
-    
+
     g.add_edge("A", "B", 60);
     g.add_edge("A", "G", 40);
     g.add_edge("A", "H", 50);
@@ -1329,30 +1301,186 @@ auto create_test_AOE_graph() -> hbut::Graph<std::string>{
     return g;
 }
 
-void test_critical_path(){
-    cout<<"测试拓扑排序：";
+void test_topology_sort_algorithm(){
+    cout<<"测试hbut::graph 拓扑排序算法\n\t";
     auto g {create_test_AOE_graph()};
     auto result {g.topology_sort()};
     for(auto& v_id : *result) cout<<*(g.get_vertex_by_id(v_id))<<' ';
-    
-    cout<<"\n测试关键路径：\n";
-    g.critical_path_print();
-    cout<<'\n';
+    cout<<"\n";
 }
 
-void test_static_data_structure_search(){
-    hbut::vector<int> data {1, 2, 4, 5, 6, 9, 12};
-    cout<<"测试顺序查找：\n";
-    
-    for (int value : {1,3,9,10}){
-        cout << "\t查找" << value << ": "
-             << (hbut::find(data.begin(), data.end(), value) != data.end()) << "\n";
+void test_critical_path_algorithm(){
+    cout<<"测试hbut::graph 关键路径算法\n";
+    auto g {create_test_AOE_graph()};
+    g.critical_path_print();
+    cout<<"\n";
+}
+
+void test_graph(){
+    cout<<"\n\n***图***\n";
+    test_graph_add_vertices_edges();
+    test_graph_get_edge_weight();
+    test_graph_remove_edge();
+    test_graph_remove_vertex();
+    test_graph_BFS();
+    test_graph_DFS_recursive();
+    test_graph_DFS_iterative();
+    test_graph_BFS_tree();
+    test_graph_DFS_tree();
+    test_prim_algorithm();
+    test_kruskal_algorithm();
+    test_shortest_path_algorithm();
+    test_topology_sort_algorithm();
+    test_critical_path_algorithm();
+}
+
+void test_std_find(){
+    cout<<"测试std::find\n";
+    std::vector<int> v{2, 3, 5, 1, 0};
+    auto ret {std::find(v.begin(), v.end(), 5)};
+    if (ret != v.end()){
+        cout<<"\t集合中有5\n";
     }
-    
-    cout<<"测试二分查找：\n";
-    
-    for (int value : {1,3,9,10}){
-        cout << "\t查找" << value << ": "
-             << hbut::binary_search(data.begin(), data.end(), value) << "\n";
+    ret = std::find(v.begin(), v.end(), 4);
+    if (ret == v.end()){
+        cout<<"\t集合中没有4\n";
     }
+    cout<<"\n";
+}
+
+void test_hbut_find(){
+    cout<<"测试hbut::find\n";
+    std::vector<int> v{2, 3, 5, 1, 0};
+    auto ret {hbut::find(v.begin(), v.end(), 5)};
+    if (ret != v.end()){
+        cout<<"\t集合中有5\n";
+    }
+    ret = hbut::find(v.begin(), v.end(), 4);
+    if (ret == v.end()){
+        cout<<"\t集合中没有4\n";
+    }
+    cout<<"\n";
+}
+
+void test_std_binary_search(){
+    cout<<"测试std::binary_search\n";
+    std::vector<int> v{1,4,7,9,11,12,13,16,19,20};
+    auto ret {std::binary_search(v.begin(), v.end(), 16)};
+    if (ret){
+        cout<<"\t有序集合中有16\n";
+    }
+    ret = std::binary_search(v.begin(), v.end(), 8);
+    if (!ret){
+        cout<<"\t有序集合中没有8\n";
+    }
+    cout<<"\n";
+}
+
+void test_hbut_binary_search(){
+    cout<<"测试hbut::binary_search\n";
+    std::vector<int> v{1,4,7,9,11,12,13,16,19,20};
+    auto ret {hbut::binary_search(v.begin(), v.end(), 16)};
+    if (ret){
+        cout<<"\t有序集合中有16\n";
+    }
+    ret = hbut::binary_search(v.begin(), v.end(), 8);
+    if (!ret){
+        cout<<"\t有序集合中没有8\n";
+    }
+    cout<<"\n";
+}
+
+void test_search_methods(){
+    cout<<"\n\n***查找***\n";
+    test_std_find();
+    test_hbut_find();
+    test_std_binary_search();
+    test_hbut_binary_search();
+}
+
+
+void vector_experiment(){
+    cout<<"vector实验\n";
+    std::ifstream data_file("../experiment_data/linear_data_structure_experiment.txt");
+    if(!data_file.is_open()){
+        cout<<"打开文件失败\n";
+    }
+
+    std::vector<int> data;
+    std::string value;
+
+    auto start_time {std::clock()};
+    while(std::getline(data_file, value)){
+        data.push_back(std::stoi(value));
+    }
+    auto end_time{std::clock()};
+    cout << "\t读取文件耗时："<< double (end_time - start_time)/CLOCKS_PER_SEC<<"秒\n";
+
+    //在所有0之前插入-1
+    start_time = std::clock();
+    for(auto iter{data.begin()}; iter!=data.end(); ++iter){
+        if(*iter == 0){
+            iter = data.insert(iter, -1);
+            ++iter;
+        }
+    }
+    end_time = std::clock();
+    cout<<"\t插入操作耗时："<<(double)(end_time - start_time)/CLOCKS_PER_SEC<<"秒\n";
+
+    //删除所有0
+    start_time = std::clock();
+    for(auto iter{data.begin()}; iter!=data.end(); ++iter){
+        if(*iter==0){
+            iter = data.erase(iter);
+            --iter;
+        }
+    }
+    end_time = std::clock();
+    cout<<"\t删除操作耗时："<<(double)(end_time - start_time)/CLOCKS_PER_SEC<<"秒\n";
+}
+
+void list_experiment(){
+    cout<<"list实验\n";
+    std::ifstream data_file("../experiment_data/linear_data_structure_experiment.txt");
+    if(!data_file.is_open()){
+        cout<<"打开文件失败\n";
+    }
+
+    std::list<int> data;
+    std::string value;
+
+    auto start_time {std::clock()};
+    while(std::getline(data_file, value)){
+        data.push_back(std::stoi(value));
+    }
+    auto end_time{std::clock()};
+    cout << "\t读取文件耗时："<< double (end_time - start_time)/CLOCKS_PER_SEC<<"秒\n";
+
+    //在所有0之前插入-1
+    start_time = std::clock();
+    for(auto iter{data.begin()}; iter!=data.end(); ++iter){
+        if(*iter == 0){
+            iter = data.insert(iter, -1);
+            ++iter;
+        }
+    }
+    end_time = std::clock();
+    cout<<"\t插入操作耗时："<<(double)(end_time - start_time)/CLOCKS_PER_SEC<<"秒\n";
+
+    //删除所有0
+    start_time = std::clock();
+    for(auto iter{data.begin()}; iter!=data.end(); ++iter){
+        if(*iter==0){
+            iter = data.erase(iter);
+            --iter;
+        }
+    }
+    end_time = std::clock();
+    cout<<"\t删除操作耗时："<<(double)(end_time - start_time)/CLOCKS_PER_SEC<<"秒\n";
+}
+
+void linear_data_structure_experiment(){
+    cout<<"\n\n***线性结构实验示例***\n\n";
+    vector_experiment();
+    list_experiment();
 }

@@ -133,7 +133,7 @@ hbut::Binary_tree<T>::Binary_tree(
 template <typename T>
 void hbut::Binary_tree<T>::level_traversal_print() const {
     if(_root == nullptr)return;
-    std::queue<const Node* const> Q;
+    std::queue<const Node*> Q;
     //queue<const Node* const> Q; //应该也可以使用hbut::queue
     Q.push(_root);
     while(!Q.empty()){
@@ -165,7 +165,7 @@ template <typename T>
 void hbut::Binary_tree<T>::pre_order_traversal_print_iterative(
 )const{
     if(_root == nullptr) return;
-    std::stack<const Node* const> S;
+    std::stack<const Node*> S;
 //    stack<const Node*> S;
     S.push(_root);
     while(!S.empty()){
@@ -197,7 +197,7 @@ template <typename T>
 void hbut::Binary_tree<T>::in_order_traversal_print_iterative(
 ) const {
     if(_root == nullptr) return;
-    std::stack<const Node* const> S;
+    std::stack<const Node*> S;
     const Node* curr {_root};
     while(curr != nullptr || !S.empty()){
         //将指针移动到最左，并在S中记录路径
@@ -235,7 +235,7 @@ template <typename T>
 void hbut::Binary_tree<T>::post_order_traversal_print_iterative(
 ) const {
     if(_root == nullptr) return;
-    std::stack<const Node* const> S;
+    std::stack<const Node*> S;
     const Node* curr {_root};
     const Node* last_visited {nullptr};
     while(curr != nullptr || !S.empty()){

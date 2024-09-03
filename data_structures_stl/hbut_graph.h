@@ -597,7 +597,7 @@ auto hbut::Graph<T>::min_spanning_tree_kruskal(
 
 template <typename T>
 auto hbut::Graph<T>::in_degree(
-    unsigned int v_id
+    unsigned int v_id //顶点id
 ) const -> unsigned int{
     
     unsigned int in_d{0};
@@ -614,7 +614,8 @@ auto hbut::Graph<T>::in_degree(
 }
 
 template <typename T>
-auto hbut::Graph<T>::topology_sort() const ->std::optional<vector_uint>{
+auto hbut::Graph<T>::topology_sort(
+) const ->std::optional<vector_uint>{
     vector_uint in_degrees(_vertices.size(), 0);
     queue_uint Q;
     vector_uint id_permutation;
@@ -625,13 +626,10 @@ auto hbut::Graph<T>::topology_sort() const ->std::optional<vector_uint>{
             Q.push(v_id);
         }
     }
-    
-    unsigned int count {0};
-    
+
     while(!Q.empty()){
-        auto curr_id {Q.front()}; Q.pop();
+        const auto curr_id {Q.front()}; Q.pop();
         id_permutation.push_back(curr_id);
-        ++count;
         for(const auto& to_edge : _all_edge_list[curr_id]){
             --in_degrees[to_edge.to_id];
             if(in_degrees[to_edge.to_id] == 0){
@@ -639,7 +637,7 @@ auto hbut::Graph<T>::topology_sort() const ->std::optional<vector_uint>{
             }
         }
     }
-    return count == _vertex_num ?
+    return id_permutation.size() == _vertex_num ?
             std::optional<vector_uint>(id_permutation)
             :
             std::nullopt;
@@ -690,8 +688,8 @@ auto hbut::Graph<T>::critical_path_print() const {
             const auto j {to_edge.to_id};
             const auto delay {VL[j] - VE[i] - to_edge.weight};
             
-            std::cout<<'('<<*_vertices[i]<<','<<*_vertices[j]<<')'
-            <<", 时延："<<delay<<'\n';
+            std::cout<<"\t("<<*_vertices[i]<<','<<*_vertices[j]<<")"
+            <<", 时延："<<delay<<"\n";
         }
     }
 }

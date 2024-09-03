@@ -10,9 +10,6 @@
 
 #include <stdio.h>
 
-void explain_array_limitations();
-void explain_operator_overloading();
-void explain_initial_assignment();
-void explain_move_semantic();
+void preliminary_tests();
 
 #endif /* preliminaries_hpp */

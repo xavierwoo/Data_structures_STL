@@ -12,7 +12,7 @@
 
 using std::cout;
 struct TestAssignObj{
-    TestAssignObj(){cout<<"构造函数\n";}
+    TestAssignObj(){cout<<"默认构造函数\n";}
     TestAssignObj(const TestAssignObj &other){cout<<"拷贝构造函数\n";}
     auto operator=(const TestAssignObj &other) -> TestAssignObj&{
         cout<<"=操作符\n";
@@ -111,4 +111,12 @@ void explain_move_semantic(){
     test_left_right_value(b);
     test_left_right_value(std::move(b));
     test_left_right_value("abc");
+}
+
+void preliminary_tests(){
+    cout<<"\n\n****C++基础****\n\n";
+
+    explain_initial_assignment();
+    explain_operator_overloading();
+    explain_move_semantic();
 }

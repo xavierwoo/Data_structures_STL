@@ -12,7 +12,9 @@
 auto main() ->int {
 
     std::cout << "*****数据结构课程演示代码*****\n";
-    
+
+    preliminary_tests();
+
     test_std_vector();
     test_hbut_vector();
 
@@ -36,5 +38,9 @@ auto main() ->int {
     test_tree();
 
     test_graph();
+
+    test_search_methods();
+
+    linear_data_structure_experiment();
     return 0;
 }

@@ -39,9 +39,9 @@ void hanoi(const int, const char, const char, const char);
 
 template <typename Iterator, typename T>
 auto hbut::find(
-    const Iterator begin,
-    const Iterator end,
-    const T& value
+    const Iterator begin, //起始迭代器
+    const Iterator end,   //终止迭代器
+    const T& value        //待查元素
 ) -> Iterator{
     for( auto iter{begin}; iter!=end; ++iter){
         if(*iter == value) return iter;
@@ -51,16 +51,16 @@ auto hbut::find(
 
 template <typename Iterator, typename T>
 auto hbut::binary_search(
-    const Iterator begin,
-    const Iterator end,
-    const T& value
+    const Iterator begin, //起始迭代器
+    const Iterator end,   //终止迭代器
+    const T& value        //待查元素
 ) -> bool {
     auto low {begin};
     auto high {end};
     
     while(true){
         if( low > high ) return false;
-        auto mid {low + (high - low) / 2};
+        const auto mid {low + (high - low) / 2};
         if(*mid == value) {
             return true;
         }else if(*mid < value){
