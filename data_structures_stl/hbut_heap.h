@@ -9,7 +9,7 @@
 #define hbut_heap_h
 
 #include <cassert>
-
+#include <functional>
 namespace hbut {
 
 template <

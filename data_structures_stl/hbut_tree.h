@@ -73,7 +73,7 @@ void hbut::Tree<T>::DFS_pre_order_print_recursive(
 template <typename T>
 void hbut::Tree<T>::DFS_pre_order_print_iterative() const {
     if(_root == nullptr) return;
-    std::stack<const Node* const> S;
+    std::stack<const Node*> S;
     S.push(_root);
     
     while(!S.empty()){
@@ -108,7 +108,7 @@ void hbut::Tree<T>::DFS_post_order_print_recursive(
 template <typename T>
 void hbut::Tree<T>::BFS_print() const {
     if(_root == nullptr) return;
-    std::queue<const Node* const> Q;
+    std::queue<const Node*> Q;
     Q.push(_root);
     
     while(!Q.empty()){

@@ -108,7 +108,7 @@ hbut::Binary_tree<T>::Binary_tree(
     unsigned int i {0};
     const auto n {vec.size()};
 
-    std::queue<Node* const> Q;
+    std::queue<Node*> Q;
     _root = new Node(vec[i]);
     Q.push(_root);
     while(!Q.empty()){
