@@ -86,8 +86,10 @@ template <typename T>
 hbut::vector<T>::~vector(){
     for(int i{0}; i<_size; i++){
         //对当前容器中每一个元素调用析构函数
-        _data[i].~T();//需要头文件<cstdlib>
+        _data[i].~T();
     }
+
+    //需要头文件<cstdlib>
     std::free(_data);
 }
 
