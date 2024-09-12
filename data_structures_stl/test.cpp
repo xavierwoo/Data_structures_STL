@@ -1484,3 +1484,76 @@ void linear_data_structure_experiment(){
     vector_experiment();
     list_experiment();
 }
+
+
+void heap_sort(std::vector<int>& data){
+    std::make_heap(data.begin(), data.end());
+
+    for(auto i{data.size()-1}; i > 0; --i){
+        std::pop_heap(data.begin(), data.begin() + i + 1);
+    }
+}
+
+void bubble_sort(std::vector<int>& data){
+    for(auto i{0}; i < data.size() - 1; ++i){
+        bool swapped{false};
+        for(auto j{0}; j < data.size() - 1 - i; ++j){
+            if(data[j] > data[j+1]){
+                std::swap(data[j], data[j+1]);
+                swapped = true;
+            }
+        }
+        if (!swapped) return;
+    }
+}
+
+
+auto read_file_to_vector(const std::string& file) -> std::vector<int>{
+    std::ifstream data_file(file);
+    if(!data_file.is_open()){
+        cout<<"打开文件失败\n";
+    }
+    std::vector<int> data;
+    std::string value;
+    while(std::getline(data_file, value)){
+        data.push_back(std::stoi(value));
+    }
+
+    return data;
+}
+
+auto write_vector_to_file(const std::vector<int>& data, const std::string& file){
+    std::ofstream  data_file(file);
+    if(!data_file.is_open()){
+        cout<<"打开文件失败\n";
+    }
+    for(auto e : data){
+        data_file<<std::to_string(e)<<"\n";
+    }
+}
+
+void comparing_heap_bubble_sort(){
+    cout<<"对比堆排序和冒泡排序\n";
+
+    auto heap_sort_data {read_file_to_vector("../experiment_data/heap_experiment.txt")};
+
+    auto start {std::clock()};
+    heap_sort(heap_sort_data);
+    auto end {std::clock()};
+    write_vector_to_file(heap_sort_data, "../experiment_data/out1.txt");
+    cout<<"\t堆排序耗时："<<double(end - start)/CLOCKS_PER_SEC<<"\n";
+
+    auto bubble_sort_data{read_file_to_vector("../experiment_data/heap_experiment.txt")};
+    start = std::clock();
+    bubble_sort(bubble_sort_data);
+    end = std::clock();
+    write_vector_to_file(heap_sort_data, "../experiment_data/out2.txt");
+    cout<<"\t冒泡排序序耗时："<<double(end - start)/CLOCKS_PER_SEC<<"\n";
+}
+
+void binary_tree_experiment(){
+    cout<<"\n\n***二叉树实验示例***\n\n";
+
+    comparing_heap_bubble_sort();
+
+}

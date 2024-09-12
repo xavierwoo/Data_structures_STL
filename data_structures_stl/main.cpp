@@ -10,7 +10,6 @@
 #include "test.hpp"
 
 auto main() ->int {
-
     std::cout << "*****数据结构课程演示代码*****\n";
 
     preliminary_tests();
@@ -42,5 +41,7 @@ auto main() ->int {
     test_search_methods();
 
     linear_data_structure_experiment();
+
+    binary_tree_experiment();
     return 0;
 }
