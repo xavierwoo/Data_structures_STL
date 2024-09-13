@@ -33,7 +33,7 @@ auto hbut::check_brackets_matching(const std::string& str) -> bool {
                 break;
         }
     }
-    return true;
+    return stk.empty();
 }
 
 
