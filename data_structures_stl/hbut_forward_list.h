@@ -132,18 +132,16 @@ auto hbut::forward_list<T>::erase_after(
 
 template <typename T>
 void hbut::forward_list<T>::reverse(){
-    auto *new_head {new Node()};
-    new_head->next = _tail;
+    auto new_head_next = _tail;
 
     while( _head->next != _tail){
         auto next {_head->next};
         _head->next = next->next;
 
-        next->next = new_head->next;
-        new_head->next = next;
+        next->next = new_head_next;
+        new_head_next = next;
     }
-    _head->next = new_head->next;
-    delete new_head;
+    _head->next = new_head_next;
 }
 
 //********** hbut::forward_list::iterator 成员函数实现********************

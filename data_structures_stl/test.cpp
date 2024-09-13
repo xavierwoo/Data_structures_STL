@@ -388,6 +388,17 @@ void test_hbut_forward_list_insert(){
     // 3 2 10 1
 }
 
+void test_hbut_forward_list_reverse(){
+    cout<<"测试hbut::forward_list::reverse\n\t";
+    hbut::forward_list<int> lst;
+    lst.push_front(1);
+    lst.push_front(2);
+    lst.push_front(3);
+    lst.push_front(4);
+    lst.reverse();
+    for(auto e : lst) cout<<e<<' '; cout<<"\n";
+}
+
 void test_hbut_forward_list(){
     cout<<"\n***hbut::forward_list***\n";
     test_hbut_forward_list_construct_deconstruct();
@@ -395,6 +406,7 @@ void test_hbut_forward_list(){
     test_hbut_forward_list_iterator_traversal();
     test_hbut_forward_list_erase();
     test_hbut_forward_list_insert();
+    test_hbut_forward_list_reverse();
 }
 
 void test_std_list_add_traversal(){
