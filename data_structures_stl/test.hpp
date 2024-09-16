@@ -40,4 +40,8 @@ void linear_data_structure_experiment();
 
 void binary_tree_experiment();
 
+void tree_experiment();
+
+void graph_experiment();
+
 #endif /* test_hpp */

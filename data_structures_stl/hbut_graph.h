@@ -84,6 +84,14 @@ public:
 
     auto get_BFS_tree(const T&)const -> vector_opt_uint ;
     auto get_DFS_tree(const T&)const -> vector_opt_uint ;
+    auto get_v_path_from_tree(
+        unsigned int start_id,
+        unsigned int end_id,
+        const vector_opt_uint& tree
+    ) const -> vector_T;
+
+    auto get_BFS_path(const T&, const T&)const -> vector_T;
+    auto get_DFS_path(const T&, const T&)const -> vector_T;
 
     auto shortest_path(const T&, const T&
         ) const -> std::pair<vector_T, double>;
@@ -477,6 +485,57 @@ auto hbut::Graph<T>::Dijkstra(
 }
 
 template <typename T>
+auto hbut::Graph<T>::get_v_path_from_tree(
+    unsigned int start_id,
+    unsigned int end_id,
+    const vector_opt_uint& tree
+) const -> vector_T {
+    vector_T v_path;
+
+    std::optional<unsigned int> curr {end_id};
+    while(curr != std::nullopt){
+        v_path.push_back(*_vertices[*curr]);
+        curr = tree[*curr];
+    }
+    if(v_path.back() != *_vertices[start_id])v_path.clear();
+    if(!v_path.empty()){
+        std::reverse(v_path.begin(), v_path.end());
+    }
+    return v_path;
+}
+
+template <typename T>
+auto hbut::Graph<T>::get_BFS_path(
+    const T& start,
+    const T& end
+) const -> vector_T {
+    const auto opt_start_id {get_vertex_id(start)};
+    assert(opt_start_id.has_value() && "顶点不存在");
+    const auto opt_end_id {get_vertex_id(end)};
+    assert(opt_end_id.has_value() && "顶点不存在");
+
+    const auto tree {get_BFS_tree(start)};
+
+    return get_v_path_from_tree(*opt_start_id, *opt_end_id, tree);
+}
+
+template <typename T>
+auto hbut::Graph<T>::get_DFS_path(
+        const T& start,
+        const T& end
+) const -> vector_T {
+    const auto opt_start_id {get_vertex_id(start)};
+    assert(opt_start_id.has_value() && "顶点不存在");
+    const auto opt_end_id {get_vertex_id(end)};
+    assert(opt_end_id.has_value() && "顶点不存在");
+
+    const auto tree {get_DFS_tree(start)};
+
+    return get_v_path_from_tree(*opt_start_id, *opt_end_id, tree);
+}
+
+
+template <typename T>
 auto hbut::Graph<T>::shortest_path(
     const T& start, const T& end
 )const -> std::pair<vector_T, double>{
@@ -487,18 +546,8 @@ auto hbut::Graph<T>::shortest_path(
     
     auto [P, D] {Dijkstra(*opt_start_id)};
     
-    vector_T v_path;
-    
-    auto curr {opt_end_id};
-    while(curr != std::nullopt){
-        v_path.push_back(*_vertices[*curr]);
-        curr = P[*curr];
-    }
-    
-    if(!v_path.empty()){
-        std::reverse(v_path.begin(), v_path.end());
-    }
-    
+    vector_T v_path {get_v_path_from_tree(*opt_start_id, *opt_end_id, P)};
+
     return std::make_pair(v_path, D[*opt_end_id]);
 }
 

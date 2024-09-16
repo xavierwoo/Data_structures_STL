@@ -27,6 +27,7 @@
 #include <string>
 #include <fstream>
 #include <ctime>
+#include <sstream>
 
 using std::cout;
 
@@ -581,7 +582,7 @@ void test_brackets_matching(){
     std::string test_string2{"s(sde){sx[s{]}s(s)d}xxs"};
     cout<<"字符串：\""<<test_string2<<"\" 括弧匹配情况："
         <<hbut::check_brackets_matching(test_string2)
-        <<"\n";//2
+        <<"\n";//0
 }
 
 void test_std_stack(){
@@ -1202,41 +1203,19 @@ void test_graph_DFS_iterative(){
     cout<<"\n";
 }
 
-void test_graph_BFS_tree(){
-    cout<<"测试hbut::graph广度优先树\n\t";
+void test_graph_BFS_path(){
+    cout<<"测试hbut::graph广度优先路径\n\t";
     auto g {create_test_graph()};
-    auto bfs_tree {g.get_BFS_tree("A")};
-
-    cout<<"父亲表示树：\n\t\t顶点：";
-    for(int i{0}; i<g.vertex_num(); ++i) cout<<*g.get_vertex_by_id(i)<<" ";
-    cout<<"\n\t\t父亲：";
-    for(int i{0}; i<g.vertex_num(); ++i){
-        auto id {bfs_tree[i]};
-        if (id.has_value()){
-            cout<<*g.get_vertex_by_id(*id)<<" ";
-        } else {
-            cout<<"_ ";
-        }
-    }
+    auto v_path{g.get_BFS_path("A", "D")};
+    for(const auto& v : v_path) cout<<v<<" ";
     cout<<"\n";
 }
 
-void test_graph_DFS_tree(){
-    cout<<"测试hbut::graph深度优先树\n\t";
+void test_graph_DFS_path(){
+    cout<<"测试hbut::graph深度优先路径\n\t";
     auto g {create_test_graph()};
-    auto bfs_tree {g.get_DFS_tree("A")};
-
-    cout<<"父亲表示树：\n\t\t顶点：";
-    for(int i{0}; i<g.vertex_num(); ++i) cout<<*g.get_vertex_by_id(i)<<" ";
-    cout<<"\n\t\t父亲：";
-    for(int i{0}; i<g.vertex_num(); ++i){
-        auto id {bfs_tree[i]};
-        if (id.has_value()){
-            cout<<*g.get_vertex_by_id(*id)<<" ";
-        } else {
-            cout<<"_ ";
-        }
-    }
+    auto v_path{g.get_DFS_path("A", "D")};
+    for(const auto& v : v_path) cout<<v<<" ";
     cout<<"\n";
 }
 
@@ -1334,11 +1313,14 @@ void test_graph(){
     test_graph_get_edge_weight();
     test_graph_remove_edge();
     test_graph_remove_vertex();
-    test_graph_BFS();
     test_graph_DFS_recursive();
     test_graph_DFS_iterative();
-    test_graph_BFS_tree();
-    test_graph_DFS_tree();
+    test_graph_DFS_path();
+
+    test_graph_BFS();
+
+    test_graph_BFS_path();
+
     test_prim_algorithm();
     test_kruskal_algorithm();
     test_shortest_path_algorithm();
@@ -1418,7 +1400,7 @@ void vector_experiment(){
         cout<<"打开文件失败\n";
     }
 
-    std::vector<int> data;
+    hbut::vector<int> data;
     std::string value;
 
     auto start_time {std::clock()};
@@ -1458,7 +1440,7 @@ void list_experiment(){
         cout<<"打开文件失败\n";
     }
 
-    std::list<int> data;
+    hbut::list<int> data;
     std::string value;
 
     auto start_time {std::clock()};
@@ -1567,5 +1549,69 @@ void binary_tree_experiment(){
     cout<<"\n\n***二叉树实验示例***\n\n";
 
     comparing_heap_bubble_sort();
+
+}
+
+void tree_experiment(){
+    cout<<"\n\n***树实验示例***\n\n";
+
+    std::ifstream ifs("../experiment_data/expression.calc");
+    if(!ifs.is_open()){
+        cout<<"文件打开失败\n";
+        return;
+    }
+    std::string exp((std::istreambuf_iterator<char>(ifs)),
+                         std::istreambuf_iterator<char>());
+    hbut::Calculator calc(exp);
+    cout<<"\n\t计算结果为："<<calc.get_result()<<"\n\n";
+}
+
+auto split_by_space(const std::string& s) -> std::vector<std::string>{
+    std::istringstream iss(s);
+    return {std::istream_iterator<std::string>(iss),
+            std::istream_iterator<std::string>()};
+}
+
+auto read_graph(const std::string& file) -> hbut::Graph<int>{
+    std::ifstream ifs(file);
+    if(!ifs.is_open()){
+        cout<<"文件打开失败\n";
+        exit(0);
+    }
+
+    std::string line;
+    std::getline(ifs, line);
+    auto splited_value {split_by_space(line)};
+
+    while(splited_value[0] == "c"){
+        std::getline(ifs, line);
+        splited_value = split_by_space(line);
+    }
+
+    assert(splited_value[0] == "p");
+    const int vertex_num {std::stoi(splited_value[1])};
+//    const int edge_num {std::stoi(splited_value[2])};
+
+    hbut::Graph<int> graph;
+    for (int i=1; i<=vertex_num; ++i){
+        graph.add_vertex(i);
+    }
+
+    while(std::getline(ifs, line)){
+        splited_value = split_by_space(line);
+        graph.add_edge(std::stoi(splited_value[1]),
+                       std::stoi(splited_value[2]),
+                       std::stod(splited_value[3]));
+    }
+    return graph;
+}
+
+
+void graph_experiment(){
+    cout<<"\n\n***图实验示例***\n\n";
+
+    auto graph {read_graph("../experiment_data/graph.txt")};
+
+    auto dfs_tree {graph.get_DFS_tree(1)};
 
 }
