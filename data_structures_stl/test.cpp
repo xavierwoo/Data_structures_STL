@@ -28,6 +28,9 @@
 #include <fstream>
 #include <ctime>
 #include <sstream>
+#include <set>
+#include <map>
+#include <unordered_set>
 
 using std::cout;
 
@@ -660,7 +663,7 @@ void test_hbut_queue(){
 void test_std_push_heap(){
     cout<<"测试std::push_heap：\n\t";
 
-    std::vector<int> heap {20, 17, 7, 12, 7, 15};
+    std::vector<int> heap {20, 17, 7, 12, 7, 21};
     std::push_heap(heap.begin(), heap.end());
     for(int e: heap) cout<<e<<" ";
     //20 17 15 12 7 7
@@ -1384,14 +1387,132 @@ void test_hbut_binary_search(){
     cout<<"\n";
 }
 
+
+void test_std_set(){
+    cout<<"测试std::set\n\t";
+    std::set<int> s {1, 5, 8};
+    s.insert(3);
+    s.insert(9);
+    s.insert(9);
+    s.erase(8);
+    for(auto e : s) cout<<e<<" "; cout<<"\n";
+    cout<<"\t是否有元素2："<<s.contains(2);
+    cout<<"\n";
+}
+
+struct Set_obj{
+    int data1;
+    int data2;
+};
+
+auto operator<(const Set_obj& o1, const Set_obj& o2) -> bool{
+    if (o1.data1 < o2.data1) return true;
+    else if(o1.data1 > o2.data1) return false;
+    else return o1.data2 < o2.data2;
+}
+
+void test_std_set_user_defined_obj(){
+   cout<<"测试std::set 自定义类型\n\t";
+   std::set<Set_obj> s;
+   s.insert({1,2});
+   s.insert({2,3});
+   s.insert({2,1});
+   for (auto& e : s) cout<<"{"<<e.data1<<","<<e.data2<<"} ";
+   cout<<"\n";
+}
+
+void test_std_map(){
+    cout<<"测试std::map\n\t";
+    std::map<std::string, int> m;
+    m["a"] = 1; //使用[]插入或者查询元素
+    m["b"] = 2;
+    m["c"] = 3;
+    cout<<"key \"a\" 对应的值为："<<m["a"]<<"\n\t";
+    for(const auto& [key, value] : m){
+        cout<<"("<<key<<","<<value<<") ";
+    }//(a,1) (b,2) (c,3)
+    //注意[]获取不存在的key时，会插入一个默认value给这个key
+    cout<<"\n\tkey \"d\" 对应的值为："<<m["d"]<<"\n";
+    auto it {m.find("e")};
+    if(it == m.end()) cout<<"\t不存在key e";
+    cout<<"\n";
+}
+
+void test_std_unordered_set(){
+    cout<<"测试std::unordered_set\n\t";
+    std::unordered_set<int> s {1, 5, 8};
+    s.insert(3);
+    s.insert(9);
+    s.insert(9);
+    s.erase(8);
+    for(auto e : s) cout<<e<<" "; cout<<"\n";
+    // 9 3 5 1 顺序可能不同
+    cout<<"\t是否有元素2："<<s.contains(2); // 0
+    cout<<"\n";
+}
+
+struct Unordered_set_Obj{
+    int data1;
+    int data2;
+};
+struct MyHash{
+    auto operator()(const Unordered_set_Obj& obj) const -> size_t {
+        return std::hash<int>()(obj.data1) * 31
+               + std::hash<int>()(obj.data2) ;
+        // std::hash<int>()生成一个用于对int值计算哈希值的对象
+    }
+};
+struct MyEqual{
+    auto operator()(
+        const Unordered_set_Obj &o1,
+        const Unordered_set_Obj &o2
+    ) const -> bool{
+        return o1.data1 == o2.data1 && o1.data2 == o2.data2;
+    }
+};
+
+void test_std_unordered_set_user_defined_obj(){
+    cout<<"测试std::unordered_set 自定义类型\n\t";
+    std::unordered_set<Unordered_set_Obj, MyHash, MyEqual> s;
+    s.insert({1,2});
+    s.insert({2,3});
+    s.insert({2,1});
+    for (auto& e : s) cout<<"{"<<e.data1<<","<<e.data2<<"} ";
+    //{2,3} {2,1} {1,2}顺序可能不同
+    cout<<"\n";
+}
+
+void test_std_unordered_map(){
+    cout<<"测试std::unordered_map\n\t";
+    std::unordered_map<std::string, int> m;
+    m["a"] = 1; //使用[]插入或者查询元素
+    m["b"] = 2;
+    m["c"] = 3;
+    cout<<"key \"a\" 对应的值为："<<m["a"]<<"\n\t";
+    for(const auto& [key, value] : m){
+        cout<<"("<<key<<","<<value<<") ";
+    }//(b,2) (c,3) (a,1) 顺序可能不同
+    //注意[]获取不存在的key时，会插入一个默认value给这个key
+    cout<<"\n\tkey \"d\" 对应的值为："<<m["d"]<<"\n";
+    auto it {m.find("e")};
+    if(it == m.end()) cout<<"\t不存在key e";
+    cout<<"\n";
+}
+
 void test_search_methods(){
     cout<<"\n\n***查找***\n";
     test_std_find();
     test_hbut_find();
     test_std_binary_search();
     test_hbut_binary_search();
-}
+    test_std_set();
+    test_std_set_user_defined_obj();
+    test_std_map();
 
+    test_std_unordered_set();
+    test_std_unordered_set_user_defined_obj();
+    test_std_unordered_map();
+}
 
 void vector_experiment(){
     cout<<"vector实验\n";
@@ -1566,7 +1687,9 @@ void tree_experiment(){
     cout<<"\n\t计算结果为："<<calc.get_result()<<"\n\n";
 }
 
-auto split_by_space(const std::string& s) -> std::vector<std::string>{
+auto split_by_space(
+    const std::string& s
+) -> std::vector<std::string>{
     std::istringstream iss(s);
     return {std::istream_iterator<std::string>(iss),
             std::istream_iterator<std::string>()};
@@ -1612,6 +1735,17 @@ void graph_experiment(){
 
     auto graph {read_graph("../experiment_data/graph.txt")};
 
-    auto dfs_tree {graph.get_DFS_tree(1)};
+    auto dfs_v_path {graph.get_DFS_path(1, 25)};
 
+    cout<<"\tdfs路径：";
+    for (auto v : dfs_v_path)cout<<v<<" ";
+
+    auto bfs_v_path{graph.get_BFS_path(1, 25)};
+    cout<<"\n\tbfs路径：";
+    for (auto v : bfs_v_path)cout<<v<<" ";
+
+    auto [shortest_v_path, weight] {graph.shortest_path(1, 25)};
+    cout<<"\n\t最短路径：";
+    for (auto v : shortest_v_path)cout<<v<<" ";
+    cout<<"\n\t\t权值："<<weight<<"\n";
 }
