@@ -27,6 +27,7 @@
 #include <string>
 #include <fstream>
 #include <ctime>
+#include <iterator>
 #include <sstream>
 #include <set>
 #include <map>
