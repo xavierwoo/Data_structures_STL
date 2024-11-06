@@ -36,6 +36,7 @@ void test_graph();
 
 void test_search_methods();
 
+void test_sort_algorithms();
 
 void linear_data_structure_experiment();
 

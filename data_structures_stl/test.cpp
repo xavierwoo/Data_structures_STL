@@ -1502,17 +1502,158 @@ void test_std_unordered_map(){
 
 void test_search_methods(){
     cout<<"\n\n***查找***\n";
-    test_std_find();
-    test_hbut_find();
-    test_std_binary_search();
-    test_hbut_binary_search();
-    test_std_set();
-    test_std_set_user_defined_obj();
-    test_std_map();
+//    test_std_find();
+//    test_hbut_find();
+//    test_std_binary_search();
+//    test_hbut_binary_search();
+//    test_std_set();
+//    test_std_set_user_defined_obj();
+//    test_std_map();
 
     test_std_unordered_set();
     test_std_unordered_set_user_defined_obj();
     test_std_unordered_map();
+}
+
+void test_selection_sort(){
+    cout<<"\t测试 直接选择排序\n";
+    std::vector<int> v1 {41, 12, 52, 33, 41, 20, 7};
+    hbut::selection_sort(v1.begin(), v1.end());
+    cout<<"\t";
+    for(int e:v1) cout<<e<<" ";
+    cout<<"\n";
+}
+
+void test_heap_sort(){
+    cout<<"\t测试 堆排序\n";
+    std::vector<int> v1 {41, 12, 52, 33, 41, 20, 7};
+    hbut::heap_sort(v1.begin(), v1.end());
+    cout<<"\t";
+    for(int e:v1) cout<<e<<" ";
+    cout<<"\n";
+}
+
+void test_insertion_sort(){
+    cout<<"\t测试 直接插入排序\n";
+    std::vector<int> v1 {41, 12, 52, 33, 41, 20, 7};
+    hbut::insertion_sort(v1.begin(), v1.end());
+    cout<<"\t";
+    for(int e:v1) cout<<e<<" ";
+    //7 12 20 33 41 41 52
+    cout<<"\n";
+}
+
+
+void test_shell_sort(){
+    cout<<"\t测试 希尔排序\n";
+    std::vector<int> v1 {33, 41, 52, 12, 41, 20, 7, 2};
+    hbut::shell_sort(v1.begin(), v1.end());
+    cout<<"\t";
+    for(int e:v1) cout<<e<<" ";
+    //2 7 12 20 33 41 41 52
+    cout<<"\n";
+}
+
+
+void test_bubble_sort(){
+    cout<<"\t测试 冒泡排序\n";
+    std::vector<int> v1 {41, 12, 52, 33, 41, 20, 7};
+    hbut::bubble_sort(v1.begin(), v1.end());
+    cout<<"\t";
+    for(int e:v1) cout<<e<<" ";
+    //7 12 20 33 41 41 52
+    cout<<"\n";
+}
+
+
+void test_quick_sort(){
+    cout<<"\t测试 快速排序\n";
+    std::vector<int> v1 {41, 12, 41, 33, 52, 7, 20};
+    hbut::quick_sort(v1.begin(), v1.end());
+    cout<<"\t";
+    for(int e:v1) cout<<e<<" ";
+    //7 12 20 33 41 41 52
+    cout<<"\n";
+}
+
+void test_merge_sort(){
+    cout<<"\t测试 归并排序\n";
+    std::vector<int> v1 {41, 12, 41, 33, 52, 7, 20};
+    hbut::merge_sort(v1.begin(), v1.end());
+    cout<<"\t";
+    for(int e:v1) cout<<e<<" ";
+    //7 12 20 33 41 41 52
+    cout<<"\n";
+}
+
+void test_std_sort(){
+    cout<<"\t测试 std::sort\n";
+    std::vector<int> v1 {41, 12, 41, 33, 52, 7, 20};
+    std::sort(v1.begin(), v1.end());
+    cout<<"\t";
+    for(int e:v1) cout<<e<<" ";
+    //7 12 20 33 41 41 52
+
+    std::sort(v1.begin(), v1.end(), std::greater<>());
+    cout<<"\n\t";
+    for(int e:v1) cout<<e<<" ";
+    //52 41 41 33 20 12 7
+    cout<<"\n";
+}
+
+struct Sort_obj{
+    int key;
+    char value;
+};
+
+struct Sort_Cmp{
+    auto operator()(const Sort_obj& a, const Sort_obj& b)->bool{
+        return a.key < b.key;
+    }
+};
+
+void test_std_sort_user_defined(){
+    cout<<"\t测试 自定义类型的std::sort\n";
+    std::vector<Sort_obj> v1
+            {{21,'A'}, {25,'B'}, {21,'C'}, {12,'D'}, {21,'E'}};
+    std::sort(v1.begin(), v1.end(), Sort_Cmp());
+    cout<<"\t";
+    for(auto& e:v1) cout<<"{"<<e.key<<","<<e.value<<"} ";
+    // {12,D} {21,A} {21,C} {21,E} {25,B}
+    // 元素个数较少时，std::sort可能给出稳定的排序结果
+    cout<<"\n";
+}
+
+void test_std_stable_sort(){
+    cout<<"\t测试 std::stable_sort\n";
+
+    std::vector<int> v1 {41, 12, 41, 33, 52, 7, 20};
+    std::stable_sort(v1.begin(), v1.end());
+    cout<<"\t";
+    for(int e:v1) cout<<e<<" ";
+    //7 12 20 33 41 41 52
+
+    std::vector<Sort_obj> v2
+            {{21,'A'}, {25,'B'}, {21,'C'}, {12,'D'}, {21,'E'}};
+    std::stable_sort(v2.begin(), v2.end(), Sort_Cmp());
+    cout<<"\n\t";
+    for(auto& e:v2) cout << "{" << e.key << "," << e.value << "} ";
+    // {12,D} {21,A} {21,C} {21,E} {25,B}
+    cout<<"\n";
+}
+
+void test_sort_algorithms(){
+    cout<<"\n\n***排序***\n";
+    test_selection_sort();
+    test_heap_sort();
+    test_insertion_sort();
+    test_shell_sort();
+    test_bubble_sort();
+    test_quick_sort();
+    test_merge_sort();
+    test_std_sort();
+    test_std_sort_user_defined();
+    test_std_stable_sort();
 }
 
 void vector_experiment(){

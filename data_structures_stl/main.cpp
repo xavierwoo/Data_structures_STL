@@ -32,7 +32,7 @@ auto main() ->int {
 //    test_std_heap();
 //    test_hbut_heap();
 //
-    test_binary_tree();
+//    test_binary_tree();
 //
 //    test_tree();
 //
@@ -40,7 +40,9 @@ auto main() ->int {
 //
     test_search_methods();
 //
-    linear_data_structure_experiment();
+//    test_sort_algorithms();
+
+//    linear_data_structure_experiment();
 //
 //    binary_tree_experiment();
 
